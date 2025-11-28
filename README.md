@@ -85,7 +85,7 @@ You'll get a beautiful interactive menu:
 ║  ╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝  ║
 ╚═══════════════════════════════════════════════════════╝
             Download PornHub Shorts with Style!
-    version 1.0.0 • Lightweight & Beautiful CLI
+    version 1.0.5 • Lightweight & Beautiful CLI
 ```
 
 ### Command Line Mode (For power users)
