@@ -53,8 +53,8 @@ install.bat
 
 ```bash
 # Clone or download the repository
-git clone https://github.com/yourusername/ph-shorts.git
-cd ph-shorts
+git clone https://github.com/diastom/PornHub-Shorts.git
+cd PornHub-Shorts
 
 # Install using pip
 pip install .
