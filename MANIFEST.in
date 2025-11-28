@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+include requirements.txt
+include install.sh
+include install.bat
+recursive-include PHShorts *.py
