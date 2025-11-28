@@ -158,6 +158,36 @@ class CustomHLSDownloader:
         except Exception as e:
             raise RuntimeError(f"Extraction failed: {e}")
 
+    def extract_video_id(self, url: str) -> str:
+        """Extracts video ID from URL."""
+        match = re.search(r'viewkey=([a-zA-Z0-9]+)', url)
+        if match:
+            return match.group(1)
+        return "unknown"
+
+    def download_subtitles(self, html_content: str, output_base: Path) -> bool:
+        """Attempts to find and download subtitles."""
+        try:
+            # Look for captions in mediaDefinitions
+            media_def_match = re.search(r'mediaDefinitions\s*[:=]\s*(\[.+?\])', html_content)
+            if media_def_match:
+                definitions = json.loads(media_def_match.group(1))
+                for video in definitions:
+                    if video.get('format') == 'srt' or video.get('format') == 'vtt':
+                        sub_url = video.get('videoUrl')
+                        if sub_url:
+                            ext = video.get('format', 'srt')
+                            sub_path = output_base.with_suffix(f".{ext}")
+                            
+                            response = self.session.get(sub_url)
+                            if response.status_code == 200:
+                                with open(sub_path, 'wb') as f:
+                                    f.write(response.content)
+                                return True
+            return False
+        except Exception:
+            return False
+
     def _get_qualities(self, playlist_content: str, base_url: str) -> dict:
         """Parses Master Playlist and returns dict {height: url}."""
         lines = playlist_content.splitlines()
@@ -294,6 +324,11 @@ class CustomHLSDownloader:
 
     def _download_segment(self, url: str, index: int, save_dir: Path) -> Path:
         filename = save_dir / f"segment_{index:04d}.ts"
+        
+        # Resume logic: Skip if already downloaded
+        if filename.exists() and filename.stat().st_size > 0:
+            return filename
+
         retries = 5
         for attempt in range(retries):
             try:
