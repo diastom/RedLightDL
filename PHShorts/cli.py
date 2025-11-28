@@ -26,7 +26,7 @@ BANNER = """
 [bold cyan]║[/]  [bold magenta]╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝[/]  [bold cyan]║[/]
 [bold cyan]╚═══════════════════════════════════════════════════════╝[/]
             [bold yellow]Download PornHub Shorts with Style![/]
-    [dim]version 1.0.0 • Simple & Light[/]
+    [dim]version 1.0.1 • Simple & Light[/]
 """
 
 

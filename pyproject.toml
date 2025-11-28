@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ph-shorts"  # اسم رو unique کن با username خودت
-version = "1.0.0"
+name = "ph-shorts"
+version = "1.0.1"
 description = "Download PornHub Shorts videos - Simpler & lighter than yt-dlp"
 readme = "README.md"
 requires-python = ">=3.8"
