@@ -214,3 +214,4 @@ __marimo__/
 *.ts
 temp_segments/
 RELEASE_NOTES.md
+build_entry.py
