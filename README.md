@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10+-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -19,10 +19,12 @@
 ## ✨ Features
 
 - 🎯 **Specialized** - Built specifically for PornHub Shorts
+- 📚 **Programmable API** - Use as a Python library to build custom scripts and bots
 - 🎨 **Beautiful CLI** - Rich terminal UI with colors and progress bars
 - 🚀 **Fast Downloads** - Multi-threaded segment downloading
 - 📺 **Quality Selection** - Choose from available qualities (1080p, 720p, 480p, etc.)
 - 🌐 **Proxy Support** - Built-in HTTP/HTTPS proxy support
+- ⚡ **Async Support** - Perfect for Telegram/Discord bot integration
 - 🔄 **Auto-conversion** - Automatic conversion to MP4 (requires FFmpeg)
 - 💾 **Smart Naming** - Automatically extracts and sanitizes video titles
 - 🔁 **Retry Logic** - Auto-retry failed segments
@@ -85,7 +87,7 @@ You'll get a beautiful interactive menu:
 ║  ╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝  ║
 ╚════════════════════════════════════════════════════════════════════════════╝
             Download PornHub Shorts with Style!
-    version 1.0.5 • Lightweight & Beautiful CLI
+    version 1.0.6 • Lightweight & Beautiful CLI
 ```
 
 ### Command Line Mode (For power users)
@@ -125,6 +127,73 @@ ph-shorts "URL" --keep-ts
 ```bash
 ph-shorts "URL" -q 1080 -o "awesome_video.mp4" -p http://proxy:8080
 ```
+
+## 🔧 Using as a Library
+
+PHShorts v1.0.6+ can be used as a Python library to build custom scripts, bots, and automation tools!
+
+### Quick Start
+
+```python
+from PHShorts import DownloadVideo
+
+# Simple one-liner download
+video_path = DownloadVideo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
+print(f"Downloaded: {video_path}")
+```
+
+### Get Video Information
+
+```python
+from PHShorts import GetVideoInfo
+
+info = GetVideoInfo("https://www.pornhub.com/...")
+print(f"Title: {info['title']}")
+print(f"Available Qualities: {info['available_qualities']}")
+```
+
+### Progress Tracking
+
+```python
+from PHShorts import VideoDownloader
+
+def progress(downloaded, total):
+    percent = (downloaded / total) * 100
+    print(f"Progress: {percent:.1f}%")
+
+downloader = VideoDownloader(output_dir="./videos")
+video_path = downloader.download(
+    url="https://www.pornhub.com/...",
+    quality="720",
+    on_progress=progress
+)
+```
+
+### Async Support (for Bots)
+
+Perfect for Telegram bots, Discord bots, and other async applications:
+
+```python
+from PHShorts import AsyncVideoDownloader
+
+async def download_for_bot(url: str):
+    async with AsyncVideoDownloader() as downloader:
+        # Get info first
+        info = await downloader.get_info(url)
+        print(f"Downloading: {info['title']}")
+        
+        # Download video
+        video_path = await downloader.download(url)
+        return video_path
+```
+
+### More Examples
+
+Check the [`examples/`](examples/) directory for complete working examples:
+- [`basic_usage.py`](examples/basic_usage.py) - Simple download
+- [`progress_tracking.py`](examples/progress_tracking.py) - Progress bar
+- [`telegram_bot.py`](examples/telegram_bot.py) - Telegram bot integration
+- [`batch_download.py`](examples/batch_download.py) - Batch downloads
 
 ## ⚙️ Options
 

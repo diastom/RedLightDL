@@ -16,7 +16,7 @@ from rich.markdown import Markdown
 
 from .downloader import CustomHLSDownloader
 from .database import DatabaseManager
-from . import __version__, __description__
+from . import __version__, __description__, __author__
 
 console = Console()
 db = DatabaseManager()
@@ -31,7 +31,7 @@ BANNER = """
 [bold cyan]║[/]  [bold magenta]╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝[/]  [bold cyan]║[/]
 [bold cyan]╚════════════════════════════════════════════════════════════════════════════╝[/]
             [bold yellow]Download PornHub Shorts with Style![/]
-    [dim]version 1.0.5 • Simple & Light[/]
+    [dim]version 1.0.6 • Simple & Light[/]
 """
 
 
