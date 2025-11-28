@@ -11,8 +11,10 @@ from rich.prompt import Prompt, Confirm
 from rich.table import Table
 from rich import box
 from rich.text import Text
+from rich.markdown import Markdown
 
 from .downloader import CustomHLSDownloader
+from . import __version__, __description__
 
 console = Console()
 
@@ -26,13 +28,34 @@ BANNER = """
 [bold cyan]║[/]  [bold magenta]╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝[/]  [bold cyan]║[/]
 [bold cyan]╚═══════════════════════════════════════════════════════╝[/]
             [bold yellow]Download PornHub Shorts with Style![/]
-    [dim]version 1.0.1 • Simple & Light[/]
+    [dim]version 1.0.2 • Simple & Light[/]
 """
 
 
 def show_banner():
     """Display the awesome banner"""
     console.print(BANNER)
+
+
+def show_version(ctx, param, value):
+    """Display version information"""
+    if not value or ctx.resilient_parsing:
+        return
+    
+    version_info = Panel(
+        f"[bold cyan]PH Shorts Downloader[/]\n\n"
+        f"[yellow]Version:[/] [bold white]{__version__}[/]\n"
+        f"[yellow]Author:[/] [bold white]{__author__}[/]\n"
+        f"[yellow]Description:[/] [dim]{__description__}[/]\n\n"
+        f"[dim]For more information, visit:[/]\n"
+        f"[link=https://github.com/diastom/PornHub-Shorts]https://github.com/diastom/PornHub-Shorts[/]",
+        title="[bold magenta]📦 Package Info[/]",
+        border_style="cyan",
+        box=box.ROUNDED,
+        padding=(1, 2)
+    )
+    console.print(version_info)
+    ctx.exit()
 
 
 def interactive_mode():
@@ -218,29 +241,95 @@ def download_video(url, output=None, quality='best', proxy=None, keep_ts=False):
         sys.exit(1)
 
 
-@click.command()
+@click.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.argument('url', required=False)
-@click.option('-o', '--output', help='Custom output filename', default=None)
-@click.option('-q', '--quality', default='best', help='Quality (best, worst, 1080, 720, 480)')
-@click.option('-p', '--proxy', help='HTTP/HTTPS Proxy URL', default=None)
-@click.option('--keep-ts', is_flag=True, help='Keep the original .ts file')
+@click.option('-o', '--output', 
+              help='Custom output filename', 
+              default=None,
+              metavar='FILE')
+@click.option('-q', '--quality', 
+              default='best', 
+              help='Video quality: best, worst, 1080, 720, 480',
+              metavar='QUALITY')
+@click.option('-p', '--proxy', 
+              help='HTTP/HTTPS proxy URL (e.g., http://127.0.0.1:1080)', 
+              default=None,
+              metavar='URL')
+@click.option('--keep-ts', 
+              is_flag=True, 
+              help='Keep the original .ts file after conversion')
+@click.option('-v', '--version',
+              is_flag=True,
+              callback=show_version,
+              expose_value=False,
+              is_eager=True,
+              help='Show version information and exit')
 def main(url, output, quality, proxy, keep_ts):
     """
-    PH Shorts Downloader - Download PornHub Shorts videos with style!
+    \b
+    ╔═══════════════════════════════════════════════════════╗
+    ║                  PH SHORTS DOWNLOADER                 ║
+    ╚═══════════════════════════════════════════════════════╝
     
-    Examples:
+    Download PornHub Shorts videos with a beautiful interface!
     
-        # Interactive mode
-        ph-shorts
-        
-        # Download with URL
-        ph-shorts "https://www.pornhub.com/view_video.php?viewkey=..."
-        
-        # Specify quality and output
-        ph-shorts "URL" -q 720 -o my_video.mp4
-        
-        # Use proxy
-        ph-shorts "URL" -p http://127.0.0.1:1080
+    \b
+    📖 USAGE:
+      ph-shorts [URL] [OPTIONS]
+      ph-shorts                    # Interactive mode
+      ph-shorts --version          # Show version
+      ph-shorts --help             # Show this help
+    
+    \b
+    ✨ EXAMPLES:
+      # Interactive mode with prompts
+      ph-shorts
+      
+      # Download with URL (best quality)
+      ph-shorts "https://www.pornhub.com/view_video.php?viewkey=..."
+      
+      # Specify quality
+      ph-shorts "URL" -q 720
+      ph-shorts "URL" --quality 1080
+      
+      # Custom output filename
+      ph-shorts "URL" -o my_video.mp4
+      
+      # Use HTTP/HTTPS proxy
+      ph-shorts "URL" -p http://127.0.0.1:1080
+      ph-shorts "URL" --proxy http://proxy.example.com:8080
+      
+      # Keep original .ts file
+      ph-shorts "URL" --keep-ts
+      
+      # Combine options
+      ph-shorts "URL" -q 1080 -o "video.mp4" -p http://proxy:8080
+    
+    \b
+    📺 QUALITY OPTIONS:
+      best   - Highest available quality (default)
+      1080   - 1080p resolution
+      720    - 720p resolution  
+      480    - 480p resolution
+      worst  - Lowest available quality (save bandwidth)
+    
+    \b
+    🔧 REQUIREMENTS:
+      • Python 3.10+
+      • FFmpeg (optional, for MP4 conversion)
+      • Internet connection
+    
+    \b
+    💡 TIPS:
+      • Use interactive mode if you're new (just run: ph-shorts)
+      • FFmpeg is needed for MP4 conversion, otherwise .ts files are saved
+      • Set a proxy if you have connection issues
+      • Use 'best' quality for automatic quality selection
+    
+    \b
+    📚 MORE INFO:
+      GitHub: https://github.com/diastom/PornHub-Shorts
+      Issues: https://github.com/diastom/PornHub-Shorts/issues
     """
     
     if not url:
