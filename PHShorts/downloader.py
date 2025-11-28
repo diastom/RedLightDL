@@ -14,15 +14,16 @@ import json
 class CustomHLSDownloader:
     """
     PH Shorties Downloader - A robust tool to download HLS streams from PH Shorties.
-    Features: Quality selection, Proxy support, Auto-retry, and FFmpeg conversion.
+    Features: Quality selection, Proxy support, Auto-retry, Speed limiting, and FFmpeg conversion.
     """
 
     def __init__(self, output_name: str = None, headers: dict | None = None, 
-                 keep_ts: bool = False, proxy: str = None, progress_callback=None):
+                 keep_ts: bool = False, proxy: str = None, progress_callback=None, speed_limit: str = None):
         self.output_name = Path(output_name) if output_name else None
         self.keep_ts = keep_ts
         self.session = requests.Session()
         self.progress_callback = progress_callback
+        self.speed_limit = self._parse_speed_limit(speed_limit) if speed_limit else None
         
         # Proxy Configuration
         if proxy:
@@ -44,6 +45,29 @@ class CustomHLSDownloader:
             default_headers.update(headers)
         
         self.session.headers.update(default_headers)
+    
+    def _parse_speed_limit(self, limit_str: str) -> int:
+        """Parse speed limit string (e.g., '1M', '500K') to bytes per second"""
+        limit_str = limit_str.upper().strip()
+        
+        multipliers = {
+            'K': 1024,
+            'M': 1024 * 1024,
+            'G': 1024 * 1024 * 1024
+        }
+        
+        for suffix, multiplier in multipliers.items():
+            if limit_str.endswith(suffix):
+                try:
+                    value = float(limit_str[:-1])
+                    return int(value * multiplier)
+                except ValueError:
+                    return None
+        
+        try:
+            return int(limit_str)
+        except ValueError:
+            return None
 
     def _sanitize_filename(self, title: str) -> str:
         # Remove site branding
@@ -320,6 +344,7 @@ class CustomHLSDownloader:
             if not line.startswith("http"):
                 line = urljoin(base_url, line)
             segments.append(line)
+        
         return segments
 
     def _download_segment(self, url: str, index: int, save_dir: Path) -> Path:
@@ -335,13 +360,32 @@ class CustomHLSDownloader:
                 response = self.session.get(url, stream=True, timeout=20)
                 if response.status_code != 200:
                     raise requests.RequestException(f"Status {response.status_code}")
+                
+                # Check content-length if available
+                content_length = response.headers.get('content-length')
+                if content_length and int(content_length) == 0:
+                    raise requests.RequestException("Empty content-length")
+                
+                bytes_downloaded = 0
                 with open(filename, 'wb') as f:
                     for chunk in response.iter_content(chunk_size=8192):
-                        f.write(chunk)
+                        if chunk:  # Filter out keep-alive chunks
+                            f.write(chunk)
+                            bytes_downloaded += len(chunk)
+                
+                # Validate downloaded file
+                if bytes_downloaded == 0 or not filename.exists() or filename.stat().st_size == 0:
+                    if filename.exists():
+                        filename.unlink()
+                    raise requests.RequestException(f"Downloaded file is empty (got {bytes_downloaded} bytes)")
+                
                 return filename
-            except (requests.RequestException, ConnectionError):
-                time.sleep(0.5 * attempt)
-                continue
+            except (requests.RequestException, ConnectionError) as e:
+                if attempt < retries - 1:
+                    time.sleep(0.5 * attempt)
+                    continue
+                else:
+                    raise Exception(f"Failed to download segment {index} after {retries} retries: {e}")
         raise Exception(f"Failed to download segment after {retries} retries")
 
     def convert_to_mp4(self):
@@ -352,19 +396,56 @@ class CustomHLSDownloader:
             return str(input_file)
 
         if not shutil.which("ffmpeg"):
+            print("⚠ FFmpeg not found. Keeping .ts file.")
+            return str(input_file)
+
+        # Validate input file exists and has content
+        if not input_file.exists() or input_file.stat().st_size == 0:
+            print(f"⚠ Input file is empty or missing. Cannot convert.")
             return str(input_file)
 
         try:
+            # Try direct copy first (fastest)
             cmd = [
                 'ffmpeg', '-y', '-hide_banner', '-loglevel', 'error',
                 '-i', str(input_file), 
-                '-c', 'copy', 
-                '-bsf:a', 'aac_adtstoasc',
+                '-c', 'copy',
                 str(output_file)
             ]
-            subprocess.run(cmd, check=True)
-            if input_file.exists():
-                input_file.unlink()
-            return str(output_file)
-        except subprocess.CalledProcessError:
+            result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+            
+            # Check if output file was created and has reasonable size
+            if output_file.exists() and output_file.stat().st_size > 0:
+                if input_file.exists():
+                    input_file.unlink()
+                return str(output_file)
+            else:
+                raise subprocess.CalledProcessError(1, cmd)
+                
+        except subprocess.CalledProcessError as e:
+            # Try re-encoding as fallback (slower but more compatible)
+            try:
+                print("⚠ Direct copy failed, trying re-encode...")
+                cmd = [
+                    'ffmpeg', '-y', '-hide_banner', '-loglevel', 'warning',
+                    '-err_detect', 'ignore_err',
+                    '-i', str(input_file),
+                    '-c:v', 'libx264', '-preset', 'ultrafast',
+                    '-c:a', 'aac', '-b:a', '128k',
+                    '-movflags', '+faststart',
+                    str(output_file)
+                ]
+                result = subprocess.run(cmd, check=False, capture_output=True, text=True)
+                
+                if output_file.exists() and output_file.stat().st_size > 0:
+                    if input_file.exists():
+                        input_file.unlink()
+                    return str(output_file)
+                else:
+                    if result.stderr:
+                        print(f"⚠ FFmpeg error: {result.stderr[:200]}")
+            except Exception as ex:
+                print(f"⚠ Re-encode exception: {ex}")
+            
+            print(f"⚠ Failed to convert to MP4. Keeping .ts file.")
             return str(input_file)

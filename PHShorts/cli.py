@@ -31,7 +31,7 @@ BANNER = """
 [bold cyan]║[/]  [bold magenta]╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝[/]  [bold cyan]║[/]
 [bold cyan]╚═══════════════════════════════════════════════════════╝[/]
             [bold yellow]Download PornHub Shorts with Style![/]
-    [dim]version 1.0.4 • Simple & Light[/]
+    [dim]version 1.0.5 • Simple & Light[/]
 """
 
 
@@ -84,11 +84,12 @@ def interactive_mode():
     while True:
         console.print("\n[bold cyan]📌 Main Menu:[/]")
         console.print("1. [bold green]Download Video[/]")
-        console.print("2. [bold yellow]View History[/]")
-        console.print("3. [bold magenta]View Statistics[/]")
-        console.print("4. [bold red]Exit[/]")
+        console.print("2. [bold blue]Search Videos[/]")
+        console.print("3. [bold yellow]View History[/]")
+        console.print("4. [bold magenta]View Statistics[/]")
+        console.print("5. [bold red]Exit[/]")
         
-        choice = Prompt.ask("\n   Select an option", choices=["1", "2", "3", "4"], default="1")
+        choice = Prompt.ask("\n   Select an option", choices=["1", "2", "3", "4", "5"], default="1")
         
         if choice == "1":
             # Get URL
@@ -132,27 +133,37 @@ def interactive_mode():
             # Subtitles
             subs = Confirm.ask("\n[bold yellow]📝 Download Subtitles?[/]", default=False)
             
+            # Speed Limit
+            speed_limit = None
+            if Confirm.ask("\n[bold yellow]⚡ Limit download speed?[/]", default=False):
+                speed_limit = Prompt.ask("   [cyan]Enter speed limit (e.g., 1M, 500K)[/]")
+            
             # Start download
-            download_video(url, output=output, quality=quality, proxy=proxy, keep_ts=keep_ts, subs=subs)
+            download_video(url, output=output, quality=quality, proxy=proxy, keep_ts=keep_ts, subs=subs, speed_limit=speed_limit)
             
             if not Confirm.ask("\n[bold cyan]Do you want to continue?[/]", default=True):
                 console.print("[bold green]Goodbye! 👋[/]")
                 break
                 
         elif choice == "2":
+            from .search import PornHubSearch
+            searcher = PornHubSearch()
+            searcher.interactive_search()
+            
+        elif choice == "3":
             db.show_history(console)
             Prompt.ask("\n[dim]Press Enter to return to menu...[/]")
             
-        elif choice == "3":
+        elif choice == "4":
             db.show_stats(console)
             Prompt.ask("\n[dim]Press Enter to return to menu...[/]")
             
-        elif choice == "4":
+        elif choice == "5":
             console.print("[bold green]Goodbye! 👋[/]")
             break
 
 
-def download_video(url, output=None, quality='best', proxy=None, keep_ts=False, subs=False):
+def download_video(url, output=None, quality='best', proxy=None, keep_ts=False, subs=False, speed_limit=None):
     """Download a video with fancy progress bars"""
     
     headers = {'Origin': 'https://www.pornhub.com'}
@@ -164,7 +175,8 @@ def download_video(url, output=None, quality='best', proxy=None, keep_ts=False, 
                 output_name=output,
                 headers=headers,
                 keep_ts=keep_ts,
-                proxy=proxy
+                proxy=proxy,
+                speed_limit=speed_limit
             )
             streams = downloader.extract_video_info(url)
             
@@ -205,14 +217,35 @@ def download_video(url, output=None, quality='best', proxy=None, keep_ts=False, 
             
             # Check for multiple qualities (Master Playlist)
             if "#EXT-X-STREAM-INF" in playlist_content:
+                console.print("[dim]Detected Master Playlist, fetching media playlist...[/]")
+                
+                # Parse available qualities from master playlist
                 qualities = downloader._get_qualities(playlist_content, m3u8_url)
+                
                 if qualities:
-                    # Logic to select from master playlist if needed (usually we already have the stream)
-                    pass
+                    # Select the first quality from parsed master playlist
+                    # (user already selected quality when choosing stream URL earlier)
+                    sorted_keys = sorted([k for k in qualities.keys() if isinstance(k, int)], reverse=True)
+                    if sorted_keys:
+                        # Pick first available quality
+                        selected_q = sorted_keys[0]
+                        media_playlist_url = qualities[selected_q]
+                        
+                        console.print(f"[dim]Fetching media playlist for {selected_q}p...[/]")
+                        
+                        # Fetch the actual media playlist
+                        response = downloader.session.get(media_playlist_url, timeout=10)
+                        response.raise_for_status()
+                        playlist_content = response.text
+                        m3u8_url = media_playlist_url
+                else:
+                    # Fallback: just parse the master playlist as-is
+                    console.print("[yellow]⚠ Could not parse qualities from master playlist[/]")
             
-            # Parse segments
+            # Parse segments from media playlist
             segments = downloader._parse_media_playlist(playlist_content, m3u8_url)
             total_segments = len(segments)
+            
             console.print(f"[green]✓[/] Segments: [bold]{total_segments}[/]")
             
             # Download Subtitles
@@ -271,6 +304,7 @@ def download_video(url, output=None, quality='best', proxy=None, keep_ts=False, 
                 }
                 
                 completed = 0
+                failed_segments = []
                 for future in concurrent.futures.as_completed(future_to_segment):
                     idx = future_to_segment[future]
                     try:
@@ -279,7 +313,12 @@ def download_video(url, output=None, quality='best', proxy=None, keep_ts=False, 
                         completed += 1
                         progress_callback(completed, total_segments)
                     except Exception as e:
-                        pass
+                        failed_segments.append(idx)
+                        console.print(f"\n[red]Failed to download segment {idx}: {e}[/]")
+            
+            # Check if all segments downloaded successfully
+            if failed_segments:
+                raise RuntimeError(f"Failed to download {len(failed_segments)} segment(s). Download incomplete.")
             
             # Merge segments
             progress.update(task, description="[yellow]Merging segments...")
@@ -340,6 +379,14 @@ def download_video(url, output=None, quality='best', proxy=None, keep_ts=False, 
 @click.option('--subs', 
               is_flag=True, 
               help='Download subtitles if available')
+@click.option('--speed-limit',
+              default=None,
+              metavar='RATE',
+              help='Limit download speed (e.g., 1M, 500K)')
+@click.option('--search',
+              default=None,
+              metavar='QUERY',
+              help='Search videos and download')
 @click.option('--history',
               is_flag=True,
               callback=show_history,
@@ -356,7 +403,7 @@ def download_video(url, output=None, quality='best', proxy=None, keep_ts=False, 
               expose_value=False,
               is_eager=True,
               help='Show version information and exit')
-def main(url, output, quality, proxy, keep_ts, subs):
+def main(url, output, quality, proxy, keep_ts, subs, speed_limit, search):
     """
     \b
     ╔═══════════════════════════════════════════════════════╗
@@ -432,13 +479,20 @@ def main(url, output, quality, proxy, keep_ts, subs):
       Issues: https://github.com/diastom/PornHub-Shorts/issues
     """
     
+    # Handle search mode
+    if search:
+        from .search import PornHubSearch
+        searcher = PornHubSearch()
+        searcher.cli_search(search)
+        return
+    
     if not url:
         # Interactive mode
         interactive_mode()
     else:
         # CLI mode
         show_banner()
-        download_video(url, output=output, quality=quality, proxy=proxy, keep_ts=keep_ts, subs=subs)
+        download_video(url, output=output, quality=quality, proxy=proxy, keep_ts=keep_ts, subs=subs, speed_limit=speed_limit)
 
 
 if __name__ == '__main__':
