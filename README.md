@@ -6,9 +6,10 @@
 ![Python](https://img.shields.io/badge/python-3.10+-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-**Professional Adult Content Downloader videos with style!** ✨
+**Professional Adult Content Downloader with Style!** ✨
 
 *A powerful, feature-rich downloader with a beautiful CLI and comprehensive Python API*
+
 
 [Installation](#-installation) • [Features](#-features) • [Usage](#-usage) • [Examples](#-examples)
 
@@ -90,17 +91,18 @@ ph-shorts
 You'll get a beautiful interactive menu:
 
 ```
-╔════════════════════════════════════════════════════════════════════════════╗
-║  ██████╗ ██╗  ██╗    ███████╗██╗  ██╗ ██████╗ ██████╗ ████████╗███████╗  ║
-║  ██╔══██╗██║  ██║    ██╔════╝██║  ██║██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝  ║
-║  ██████╔╝███████║    ███████╗███████║██║   ██║██████╔╝   ██║   ███████╗  ║
-║  ██╔═══╝ ██╔══██║    ╚════██║██╔══██║██║   ██║██╔══██╗   ██║   ╚════██║  ║
-║  ██║     ██║  ██║    ███████║██║  ██║╚██████╔╝██║  ██║   ██║   ███████║  ║
-║  ╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝  ║
-╚════════════════════════════════════════════════════════════════════════════╝
-            Professional Adult Content Downloader with Style!
-    version 1.0.6 • Lightweight & Beautiful CLI
+╔══════════════════════════════════════════════════════════════════╗
+║  ██████╗ ███████╗██████╗ ██╗     ██╗ ██████╗ ██╗  ██╗████████╗  ║
+║  ██╔══██╗██╔════╝██╔══██╗██║     ██║██╔════╝ ██║  ██║╚══██╔══╝  ║
+║  ██████╔╝█████╗  ██║  ██║██║     ██║██║  ███╗███████║   ██║     ║
+║  ██╔══██╗██╔══╝  ██║  ██║██║     ██║██║   ██║██╔══██║   ██║     ║
+║  ██║  ██║███████╗██████╔╝███████╗██║╚██████╔╝██║  ██║   ██║     ║
+║  ╚═╝  ╚═╝╚══════╝╚═════╝ ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝     ║
+║          Professional Adult Content Downloader                  ║
+╚══════════════════════════════════════════════════════════════════╝
+                    version 1.0.7 • RedLight DL
 ```
+
 
 ### Command Line Mode (For power users)
 
