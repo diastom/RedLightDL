@@ -1,4 +1,4 @@
-"""
+﻿"""
 Video Converter Module - Convert and compress videos.
 
 This module provides format conversion and compression capabilities
@@ -19,7 +19,7 @@ class VideoConverter:
     compression with quality control. Can also extract audio-only (mp3).
     
     Example:
-        >>> from PHShorts import VideoConverter
+        >>> from RedLight import VideoConverter
         >>> 
         >>> converter = VideoConverter()
         >>> webm_file = converter.Convert("video.mp4", output_format="webm")

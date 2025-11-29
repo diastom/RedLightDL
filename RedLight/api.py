@@ -1,5 +1,5 @@
-"""
-PHShorts API - Simple helper functions for quick usage.
+﻿"""
+RedLight API - Simple helper functions for quick usage.
 
 This module provides high-level functions for downloading videos
 and extracting metadata without dealing with classes directly.
@@ -34,7 +34,7 @@ def DownloadVideo(
         Path to the downloaded video file
         
     Example:
-        >>> from PHShorts import DownloadVideo
+        >>> from RedLight import DownloadVideo
         >>> video_path = DownloadVideo("https://pornhub.com/...")
         >>> print(f"Downloaded to: {video_path}")
     """
@@ -94,7 +94,7 @@ def GetVideoInfo(url: str) -> Dict[str, Union[str, List[int]]]:
             - video_id: Extracted video ID
             
     Example:
-        >>> from PHShorts import GetVideoInfo
+        >>> from RedLight import GetVideoInfo
         >>> info = GetVideoInfo("https://pornhub.com/...")
         >>> print(f"Title: {info['title']}")
         >>> print(f"Qualities: {info['available_qualities']}")
@@ -133,7 +133,7 @@ def ListAvailableQualities(url: str) -> List[int]:
         List of available quality heights (e.g., [1080, 720, 480])
         
     Example:
-        >>> from PHShorts import ListAvailableQualities
+        >>> from RedLight import ListAvailableQualities
         >>> qualities = ListAvailableQualities("https://pornhub.com/...")
         >>> print(f"Available: {qualities}")
     """
@@ -149,7 +149,7 @@ class VideoDownloader:
     over the download process, including progress tracking and quality selection.
     
     Example:
-        >>> from PHShorts import VideoDownloader
+        >>> from RedLight import VideoDownloader
         >>> 
         >>> def progress(downloaded, total):
         ...     percent = (downloaded / total) * 100

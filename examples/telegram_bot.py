@@ -1,11 +1,11 @@
-"""
-Telegram Bot Example - PHShorts Async API
+﻿"""
+Telegram Bot Example - RedLight Async API
 
-This example shows how to integrate PHShorts with a Telegram bot
+This example shows how to integrate RedLight with a Telegram bot
 using the async API.
 
 Requirements:
-    pip install python-telegram-bot PHShorts
+    pip install python-telegram-bot RedLight
 
 Note: This is a sample implementation. You'll need to:
 1. Get a bot token from @BotFather on Telegram
@@ -15,7 +15,7 @@ Note: This is a sample implementation. You'll need to:
 import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-from PHShorts import AsyncVideoDownloader
+from RedLight import AsyncVideoDownloader
 
 
 # Replace with your bot token from BotFather

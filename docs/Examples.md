@@ -1,6 +1,6 @@
-# 💡 Code Examples
+﻿# 💡 Code Examples
 
-Practical, real-world examples for using PHShorts in your projects.
+Practical, real-world examples for using RedLight in your projects.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ Practical, real-world examples for using PHShorts in your projects.
 ### Simple Download
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 url = "https://www.pornhub.com/view_video.php?viewkey=xxxxx"
 video_path = DownloadVideo(url)
@@ -31,7 +31,7 @@ print(f"Downloaded: {video_path}")
 ### Download with Custom Settings
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 video_path = DownloadVideo(
     url="https://www.pornhub.com/view_video.php?viewkey=xxxxx",
@@ -44,7 +44,7 @@ video_path = DownloadVideo(
 ### Progress Bar with Rich
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
 
 downloader = VideoDownloader()
@@ -79,7 +79,7 @@ print(f"Downloaded: {video_path}")
 ### Simple Batch Download
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 urls = [
     "https://www.pornhub.com/view_video.php?viewkey=xxxxx",
@@ -102,7 +102,7 @@ print(f"Successfully downloaded {len(results)} videos")
 ### Batch Download with Progress and Error Handling
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 from pathlib import Path
 
 urls = [...]  # Your URLs
@@ -140,7 +140,7 @@ if failed:
 ### Download URLs from a Text File
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 from pathlib import Path
 
 # Read URLs from file
@@ -164,7 +164,7 @@ print(f"Downloaded {len(results)}/{len(urls)} videos")
 ### Download Latest Videos from Channel
 
 ```python
-from PHShorts import PlaylistDownloader, BatchDownloader
+from RedLight import PlaylistDownloader, BatchDownloader
 
 # Get latest 10 videos from channel
 playlist = PlaylistDownloader()
@@ -187,7 +187,7 @@ print(f"Downloaded {len(results)} videos")
 ### Download and Convert Channel Videos
 
 ```python
-from PHShorts import PlaylistDownloader, BatchDownloader, VideoConverter
+from RedLight import PlaylistDownloader, BatchDownloader, VideoConverter
 from pathlib import Path
 
 # Get videos
@@ -231,7 +231,7 @@ for video_path in video_paths:
 ### Search and Download Top Results
 
 ```python
-from PHShorts import PornHubSearch, DownloadVideo
+from RedLight import PornHubSearch, DownloadVideo
 
 # Search for videos
 searcher = PornHubSearch()
@@ -259,7 +259,7 @@ for i, video in enumerate(results[:5], 1):
 ### Interactive Search and Download
 
 ```python
-from PHShorts import PornHubSearch, DownloadVideo
+from RedLight import PornHubSearch, DownloadVideo
 
 searcher = PornHubSearch()
 
@@ -298,7 +298,7 @@ while True:
 ### Download and Convert to MP3
 
 ```python
-from PHShorts import DownloadVideo, VideoConverter
+from RedLight import DownloadVideo, VideoConverter
 
 # Download video
 print("Downloading...")
@@ -322,7 +322,7 @@ Path(video_path).unlink()
 ### Batch Convert Videos
 
 ```python
-from PHShorts import VideoConverter
+from RedLight import VideoConverter
 from pathlib import Path
 
 converter = VideoConverter()
@@ -349,7 +349,7 @@ for video_file in mp4_files:
 ### Smart Compression
 
 ```python
-from PHShorts import VideoConverter
+from RedLight import VideoConverter
 from pathlib import Path
 
 def compress_if_large(video_path, max_size_mb=100):
@@ -376,7 +376,7 @@ def compress_if_large(video_path, max_size_mb=100):
         return video_path
 
 # Usage
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 video_path = DownloadVideo(url)
 final_path = compress_if_large(video_path, max_size_mb=50)
@@ -391,7 +391,7 @@ final_path = compress_if_large(video_path, max_size_mb=50)
 ```python
 import schedule
 import time
-from PHShorts import PlaylistDownloader, BatchDownloader
+from RedLight import PlaylistDownloader, BatchDownloader
 from datetime import datetime
 
 def download_daily():
@@ -432,7 +432,7 @@ while True:
 ### Bulk Channel Downloader
 
 ```python
-from PHShorts import PlaylistDownloader, BatchDownloader
+from RedLight import PlaylistDownloader, BatchDownloader
 
 channels = [
     "channel1",
@@ -470,7 +470,7 @@ print(f"\nDownloaded {len(results)}/{len(all_urls)} videos")
 import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
-from PHShorts import AsyncVideoDownloader
+from RedLight import AsyncVideoDownloader
 
 async def download_video(update: Update, context):
     """Handle /download command"""
@@ -514,7 +514,7 @@ app.run_polling()
 ```python
 import discord
 from discord.ext import commands
-from PHShorts import AsyncVideoDownloader
+from RedLight import AsyncVideoDownloader
 import asyncio
 
 bot = commands.Bot(command_prefix='!')
@@ -553,7 +553,7 @@ bot.run("YOUR_BOT_TOKEN")
 ### Robust Download with Retry
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 import time
 
 def download_with_retry(url, max_retries=3):
@@ -592,7 +592,7 @@ video_path = download_with_retry(url)
 ### Batch Download with Detailed Logging
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 import logging
 from datetime import datetime
 

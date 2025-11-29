@@ -1,6 +1,6 @@
-# 🚀 Quick Start Guide
+﻿# 🚀 Quick Start Guide
 
-Get started with PHShorts in less than 5 minutes!
+Get started with RedLight in less than 5 minutes!
 
 ## Installation
 
@@ -13,8 +13,8 @@ pip install ph-shorts
 ### From Source
 
 ```bash
-git clone https://github.com/diastom/PornHub-Shorts.git
-cd PornHub-Shorts
+git clone https://github.com/diastom/RedLightDL.git
+cd RedLightDL
 pip install -e .
 ```
 
@@ -35,7 +35,7 @@ pip install -e .
 ### Option 1: Simple One-Liner
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 # Download a video (simplest way)
 video_path = DownloadVideo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
@@ -47,7 +47,7 @@ That's it! The video will be saved to `./downloads/` with auto-detected title.
 ### Option 2: With Custom Options
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 video_path = DownloadVideo(
     url="https://www.pornhub.com/view_video.php?viewkey=xxxxx",
@@ -66,7 +66,7 @@ print(f"Video saved to: {video_path}")
 ### 1. Download with Progress Tracking
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 def show_progress(downloaded, total):
     percent = (downloaded / total) * 100
@@ -82,7 +82,7 @@ print(f"\nDone! Saved to: {video_path}")
 ### 2. Check Video Info First
 
 ```python
-from PHShorts import GetVideoInfo, DownloadVideo
+from RedLight import GetVideoInfo, DownloadVideo
 
 # Get video information
 info = GetVideoInfo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
@@ -100,7 +100,7 @@ else:
 ### 3. Download Multiple Videos (Batch)
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 urls = [
     "https://www.pornhub.com/view_video.php?viewkey=xxxxx",
@@ -124,7 +124,7 @@ print(f"Downloaded {len(results)} videos")
 ### 4. Download from a Channel
 
 ```python
-from PHShorts import PlaylistDownloader, BatchDownloader
+from RedLight import PlaylistDownloader, BatchDownloader
 
 # Get videos from a channel
 playlist = PlaylistDownloader()
@@ -141,7 +141,7 @@ results = downloader.DownloadAll()
 ### 5. Search and Download
 
 ```python
-from PHShorts import PornHubSearch, DownloadVideo
+from RedLight import PornHubSearch, DownloadVideo
 
 # Search for videos
 searcher = PornHubSearch()
@@ -156,7 +156,7 @@ for video in results[:3]:
 ### 6. Convert Format
 
 ```python
-from PHShorts import DownloadVideo, VideoConverter
+from RedLight import DownloadVideo, VideoConverter
 
 # Download video (keep original .ts)
 video_path = DownloadVideo(url, keep_ts=True)
@@ -174,7 +174,7 @@ print(f"Converted: {webm_path}")
 ### 7. Compress Video
 
 ```python
-from PHShorts import DownloadVideo, VideoConverter
+from RedLight import DownloadVideo, VideoConverter
 
 # Download video
 video_path = DownloadVideo(url)
@@ -192,7 +192,7 @@ print(f"Compressed: {compressed}")
 ### 8. Extract Audio Only
 
 ```python
-from PHShorts import DownloadVideo, VideoConverter
+from RedLight import DownloadVideo, VideoConverter
 
 # Download video
 video_path = DownloadVideo(url)
@@ -211,7 +211,7 @@ print(f"Audio: {audio_path}")
 
 ## CLI Usage
 
-PHShorts also provides a beautiful command-line interface!
+RedLight also provides a beautiful command-line interface!
 
 ### Interactive Mode
 
@@ -261,7 +261,7 @@ ph-shorts "URL" --audio-only
 Always wrap your code in try-except for production use:
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 try:
     video_path = DownloadVideo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
@@ -284,7 +284,7 @@ except Exception as e:
 If you need to use a proxy:
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 
 # Create downloader with proxy
 downloader = VideoDownloader(
@@ -303,7 +303,7 @@ For async applications like Telegram/Discord bots:
 
 ```python
 import asyncio
-from PHShorts import AsyncVideoDownloader
+from RedLight import AsyncVideoDownloader
 
 async def main():
     async with AsyncVideoDownloader() as downloader:
@@ -333,6 +333,6 @@ Now that you know the basics, explore:
 
 - **Documentation:** You're reading it!
 - **Examples:** Check [examples/](../examples/) directory
-- **Issues:** [GitHub Issues](https://github.com/diastom/PornHub-Shorts/issues)
+- **Issues:** [GitHub Issues](https://github.com/diastom/RedLightDL/issues)
 
 Happy downloading! 🎉

@@ -1,4 +1,4 @@
-import sqlite3
+﻿import sqlite3
 from pathlib import Path
 from datetime import datetime
 from rich.console import Console
@@ -7,7 +7,7 @@ from rich import box
 
 class DatabaseManager:
     def __init__(self):
-        self.db_path = Path.home() / ".phshorts" / "history.db"
+        self.db_path = Path.home() / ".RedLight" / "history.db"
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self.init_db()
 

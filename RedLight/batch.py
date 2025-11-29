@@ -1,4 +1,4 @@
-"""
+﻿"""
 Batch Download Module - Download multiple videos efficiently.
 
 This module provides batch downloading capabilities with support for
@@ -19,7 +19,7 @@ class BatchDownloader:
     comprehensive progress tracking and error handling.
     
     Example:
-        >>> from PHShorts import BatchDownloader
+        >>> from RedLight import BatchDownloader
         >>> 
         >>> downloader = BatchDownloader(concurrent=True, max_workers=3)
         >>> downloader.AddUrls(["url1", "url2", "url3"])

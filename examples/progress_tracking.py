@@ -1,10 +1,10 @@
-"""
-Progress Tracking Example - PHShorts API
+﻿"""
+Progress Tracking Example - RedLight API
 
 This example shows how to track download progress with callbacks.
 """
 
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 
 
 def progress_callback(downloaded_segments, total_segments):
@@ -24,7 +24,7 @@ def progress_callback(downloaded_segments, total_segments):
 
 
 def main():
-    print("=== PHShorts API - Progress Tracking ===\n")
+    print("=== RedLight API - Progress Tracking ===\n")
     
     VIDEO_URL = "https://www.pornhub.com/view_video.php?viewkey=your_video_key_here"
     

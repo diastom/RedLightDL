@@ -1,6 +1,6 @@
-# 📘 API Functions Reference
+﻿# 📘 API Functions Reference
 
-This document covers all high-level helper functions provided by PHShorts. These functions are designed for quick and simple usage without dealing with classes directly.
+This document covers all high-level helper functions provided by RedLight. These functions are designed for quick and simple usage without dealing with classes directly.
 
 ## Table of Contents
 
@@ -47,7 +47,7 @@ def DownloadVideo(
 
 #### Basic Download
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 # Download with default settings (best quality, MP4 format)
 video_path = DownloadVideo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
@@ -140,7 +140,7 @@ def GetVideoInfo(url: str) -> Dict[str, Union[str, List[int]]]
 
 #### Basic Usage
 ```python
-from PHShorts import GetVideoInfo
+from RedLight import GetVideoInfo
 
 info = GetVideoInfo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
 
@@ -151,7 +151,7 @@ print(f"Available Qualities: {info['available_qualities']}")
 
 #### Check Available Qualities Before Download
 ```python
-from PHShorts import GetVideoInfo, DownloadVideo
+from RedLight import GetVideoInfo, DownloadVideo
 
 # Get info first
 info = GetVideoInfo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
@@ -167,7 +167,7 @@ else:
 
 #### Display Video Information
 ```python
-from PHShorts import GetVideoInfo
+from RedLight import GetVideoInfo
 
 url = "https://www.pornhub.com/view_video.php?viewkey=xxxxx"
 info = GetVideoInfo(url)
@@ -206,7 +206,7 @@ def ListAvailableQualities(url: str) -> List[int]
 
 #### Basic Usage
 ```python
-from PHShorts import ListAvailableQualities
+from RedLight import ListAvailableQualities
 
 qualities = ListAvailableQualities("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
 print(f"Available qualities: {qualities}")
@@ -215,7 +215,7 @@ print(f"Available qualities: {qualities}")
 
 #### Interactive Quality Selection
 ```python
-from PHShorts import ListAvailableQualities, DownloadVideo
+from RedLight import ListAvailableQualities, DownloadVideo
 
 url = "https://www.pornhub.com/view_video.php?viewkey=xxxxx"
 qualities = ListAvailableQualities(url)
@@ -232,7 +232,7 @@ DownloadVideo(url, quality=selected_quality)
 
 #### Automatic Quality Selection
 ```python
-from PHShorts import ListAvailableQualities, DownloadVideo
+from RedLight import ListAvailableQualities, DownloadVideo
 
 url = "https://www.pornhub.com/view_video.php?viewkey=xxxxx"
 qualities = ListAvailableQualities(url)
@@ -255,7 +255,7 @@ DownloadVideo(url, quality=quality)
 
 ### Download Multiple Videos
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 urls = [
     "https://www.pornhub.com/view_video.php?viewkey=xxxxx",
@@ -275,7 +275,7 @@ For more efficient batch downloading, see [BatchDownloader](Classes.md#batchdown
 
 ### Error Handling Best Practices
 ```python
-from PHShorts import DownloadVideo, GetVideoInfo
+from RedLight import DownloadVideo, GetVideoInfo
 
 url = "https://www.pornhub.com/view_video.php?viewkey=xxxxx"
 

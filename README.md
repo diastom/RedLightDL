@@ -1,4 +1,4 @@
-# 🎬 PH Shorts Downloader
+﻿# 🎬 RedLight DL
 
 <div align="center">
 
@@ -6,7 +6,7 @@
 ![Python](https://img.shields.io/badge/python-3.10+-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-**Download PornHub Shorts videos with style!** ✨
+**Professional Adult Content Downloader videos with style!** ✨
 
 *A powerful, feature-rich downloader with a beautiful CLI and comprehensive Python API*
 
@@ -19,7 +19,7 @@
 ## ✨ Features
 
 ### 🎯 Core Features
-- **Specialized** - Built specifically for PornHub Shorts
+- **Specialized** - Built specifically for adult content
 - **Beautiful CLI** - Rich terminal UI with colors and progress bars
 - **Fast Downloads** - Multi-threaded segment downloading
 - **Quality Selection** - Choose from available qualities (1080p, 720p, 480p, etc.)
@@ -67,8 +67,8 @@ install.bat
 
 ```bash
 # Clone or download the repository
-git clone https://github.com/diastom/PornHub-Shorts.git
-cd PornHub-Shorts
+git clone https://github.com/diastom/RedLightDL.git
+cd RedLightDL
 
 # Install using pip
 pip install .
@@ -98,7 +98,7 @@ You'll get a beautiful interactive menu:
 ║  ██║     ██║  ██║    ███████║██║  ██║╚██████╔╝██║  ██║   ██║   ███████║  ║
 ║  ╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝  ║
 ╚════════════════════════════════════════════════════════════════════════════╝
-            Download PornHub Shorts with Style!
+            Professional Adult Content Downloader with Style!
     version 1.0.6 • Lightweight & Beautiful CLI
 ```
 
@@ -187,7 +187,7 @@ ph-shorts "URL" --keep-ts
 Perfect for Telegram bots, Discord bots, and other async applications:
 
 ```python
-from PHShorts import AsyncVideoDownloader
+from RedLight import AsyncVideoDownloader
 
 async def download_for_bot(url: str):
     async with AsyncVideoDownloader() as downloader:

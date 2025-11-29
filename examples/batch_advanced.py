@@ -1,15 +1,15 @@
-"""
-Batch Download Example - PHShorts API
+﻿"""
+Batch Download Example - RedLight API
 
 This example demonstrates batch downloading with concurrent and 
 sequential modes, progress tracking, and error handling.
 """
 
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 
 def main():
-    print("=== PHShorts Batch Download Example ===\n")
+    print("=== RedLight Batch Download Example ===\n")
     
     # Example URLs (replace with actual URLs)
     urls = [

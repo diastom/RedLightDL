@@ -1,12 +1,12 @@
-# 📚 PHShorts API Documentation
+﻿# 📚 RedLight API Documentation
 
-Welcome to the complete API documentation for PHShorts! This documentation will help you integrate PHShorts into your Python projects.
+Welcome to the complete API documentation for RedLight! This documentation will help you integrate RedLight into your Python projects.
 
 ## 📖 Documentation Structure
 
 ### Quick Start
 - **[Quick Start Guide](QuickStart.md)** - Get started in 5 minutes
-- **[Installation](QuickStart.md#installation)** - Installing PHShorts
+- **[Installation](QuickStart.md#installation)** - Installing RedLight
 
 ### API Reference
 - **[API Functions](API.md)** - High-level helper functions (`DownloadVideo`, `GetVideoInfo`, etc.)
@@ -26,7 +26,7 @@ Welcome to the complete API documentation for PHShorts! This documentation will 
 ## 🚀 Quick Example
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 
 # Simple one-liner
 video_path = DownloadVideo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
@@ -43,11 +43,11 @@ print(f"Downloaded: {video_path}")
 
 ## 🆘 Getting Help
 
-- **GitHub Issues:** [Report bugs or request features](https://github.com/diastom/PornHub-Shorts/issues)
+- **GitHub Issues:** [Report bugs or request features](https://github.com/diastom/RedLightDL/issues)
 - **Examples:** Check the [examples/](../examples/) directory for working code
 
 ## 🔗 External Links
 
-- [GitHub Repository](https://github.com/diastom/PornHub-Shorts)
+- [GitHub Repository](https://github.com/diastom/RedLightDL)
 - [PyPI Package](https://pypi.org/project/ph-shorts/)
 - [Changelog](../CHANGELOG.md)

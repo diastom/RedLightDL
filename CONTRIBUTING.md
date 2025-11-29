@@ -1,4 +1,4 @@
-# Contributing to PH Shorts DL
+﻿# Contributing to RedLight DL
 
 Thank you for your interest in contributing! 🎉
 
@@ -6,7 +6,7 @@ Thank you for your interest in contributing! 🎉
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/yourusername/ph-shorts/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/diastom/RedLightDL/issues)
 2. If not, create a new issue with:
    - Clear title
    - Steps to reproduce
@@ -34,8 +34,8 @@ Open an issue with:
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/ph-shorts.git
-cd ph-shorts
+git clone https://github.com/diastom/RedLightDL.git
+cd RedLightDL
 
 # Install in development mode
 pip install -e .

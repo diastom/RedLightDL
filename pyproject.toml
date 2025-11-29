@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ph-shorts"
 version = "1.0.7"
-description = "Download PornHub Shorts videos - Simple & light"
+description = "RedLight DL - Professional adult content downloader"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "PH Shorts Team"}
+    {name = "RedLight Team"}
 ]
-keywords = ["pornhub", "downloader", "video", "shorts", "hls", "m3u8", "cli"]
+keywords = ["adult", "downloader", "video", "redlight", "hls", "m3u8", "cli"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: End Users/Desktop",
@@ -40,15 +40,15 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/diastom/PornHub-Shorts"
-"Bug Tracker" = "https://github.com/diastom/PornHub-Shorts/issues"
-Documentation = "https://github.com/diastom/PornHub-Shorts#readme"
+Homepage = "https://github.com/diastom/RedLightDL"
+"Bug Tracker" = "https://github.com/diastom/RedLightDL/issues"
+Documentation = "https://github.com/diastom/RedLightDL#readme"
 
 [project.scripts]
-ph-shorts = "PHShorts.cli:main"
-phsdl = "PHShorts.cli:main"
+ph-shorts = "RedLight.cli:main"
+phsdl = "RedLight.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["PHShorts*"]
+include = ["RedLight*"]
 exclude = ["tests*"]

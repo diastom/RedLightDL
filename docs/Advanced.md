@@ -1,6 +1,6 @@
-# ⚡ Advanced Usage
+﻿# ⚡ Advanced Usage
 
-Advanced topics, best practices, and optimization techniques for PHShorts.
+Advanced topics, best practices, and optimization techniques for RedLight.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ Advanced topics, best practices, and optimization techniques for PHShorts.
 ### Concurrent Downloads
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 # Optimal concurrent settings
 downloader = BatchDownloader(
@@ -40,7 +40,7 @@ downloader = BatchDownloader(
 When planning to convert videos, skip the initial MP4 conversion:
 
 ```python
-from PHShorts import DownloadVideo, VideoConverter
+from RedLight import DownloadVideo, VideoConverter
 
 # Download as .ts (faster, no conversion)
 video_path = DownloadVideo(url, keep_ts=True)
@@ -61,7 +61,7 @@ os.remove(video_path)
 ### Batch Processing Best Practices
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 from pathlib import Path
 
 def process_in_chunks(urls, chunk_size=10):
@@ -92,7 +92,7 @@ def process_in_chunks(urls, chunk_size=10):
 ### Custom Progress Tracking
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 import sys
 
 class ProgressTracker:
@@ -136,7 +136,7 @@ tracker.complete_download(url, video_path)
 ### Custom Headers and Authentication
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 
 # Custom headers for advanced use cases
 custom_headers = {
@@ -160,7 +160,7 @@ video_path = downloader.download(url)
 ### Comprehensive Error Recovery
 
 ```python
-from PHShorts import DownloadVideo
+from RedLight import DownloadVideo
 import logging
 import time
 from pathlib import Path
@@ -222,7 +222,7 @@ video_path = manager.download_with_recovery(url, quality="720")
 ### Batch Error Recovery
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 import json
 from pathlib import Path
 
@@ -295,7 +295,7 @@ batch.download_all(urls)
 ### Streaming for Large Batches
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 import gc
 
 def download_large_batch(urls, batch_size=10):
@@ -331,7 +331,7 @@ def download_large_batch(urls, batch_size=10):
 ### Advanced Proxy Configuration
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 import os
 
 # Use system proxy
@@ -381,7 +381,7 @@ def download_with_rotating_proxy(urls):
 
 ```python
 import time
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 class RateLimitedDownloader:
     def __init__(self, requests_per_minute=10):
@@ -396,7 +396,7 @@ class RateLimitedDownloader:
             time.sleep(self.delay - elapsed)
         
         # Download
-        from PHShorts import DownloadVideo
+        from RedLight import DownloadVideo
         result = DownloadVideo(url)
         
         self.last_request = time.time()
@@ -417,7 +417,7 @@ for url in urls:
 ### Download, Convert, and Upload Pipeline
 
 ```python
-from PHShorts import DownloadVideo, VideoConverter
+from RedLight import DownloadVideo, VideoConverter
 import boto3  # AWS S3
 from pathlib import Path
 
@@ -460,7 +460,7 @@ process_and_upload(url, "my-videos-bucket")
 ### Automated Channel Monitoring
 
 ```python
-from PHShorts import PlaylistDownloader, BatchDownloader
+from RedLight import PlaylistDownloader, BatchDownloader
 import schedule
 import time
 from pathlib import Path
@@ -541,7 +541,7 @@ monitor.start_monitoring(interval_minutes=30)
 ### Database Integration
 
 ```python
-from PHShorts import DownloadVideo, GetVideoInfo
+from RedLight import DownloadVideo, GetVideoInfo
 import sqlite3
 from datetime import datetime
 
@@ -651,7 +651,7 @@ await downloader.download(url)
 ### 2. Validate URLs Before Bulk Operations
 
 ```python
-from PHShorts import GetVideoInfo
+from RedLight import GetVideoInfo
 
 def validate_urls(urls):
     """Validate URLs before batch download"""
@@ -680,7 +680,7 @@ print(f"Valid: {len(valid)}, Invalid: {len(invalid)}")
 
 ```python
 import shutil
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 def download_with_space_check(urls, min_free_gb=10):
     """Check disk space before downloading"""
@@ -709,12 +709,12 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('phshorts.log'),
+        logging.FileHandler('RedLight.log'),
         logging.StreamHandler()
     ]
 )
 
-logger = logging.getLogger('PHShorts')
+logger = logging.getLogger('RedLight')
 
 # Use throughout your code
 logger.info("Starting download...")

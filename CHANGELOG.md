@@ -1,4 +1,4 @@
-# Release Notes - PH Shorts Downloader
+﻿# Release Notes - RedLight DL
 
 ## Version 1.0.7 (2025-11-29)
 
@@ -54,7 +54,7 @@
 ### 🎉 Major New Features
 
 #### Programmable API Support
-PHShorts can now be used as a Python library! Build custom scripts, bots, and automation tools.
+RedLight can now be used as a Python library! Build custom scripts, bots, and automation tools.
 
 **New Modules:**
 - `api.py` - High-level helper functions (PascalCase naming)
@@ -62,7 +62,7 @@ PHShorts can now be used as a Python library! Build custom scripts, bots, and au
 
 **Available Functions:**
 ```python
-from PHShorts import (
+from RedLight import (
     DownloadVideo,           # Simple one-liner downloads
     GetVideoInfo,            # Get metadata without downloading
     ListAvailableQualities,  # List available quality options

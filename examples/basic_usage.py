@@ -1,18 +1,18 @@
-"""
-Basic Usage Example - PHShorts API
+﻿"""
+Basic Usage Example - RedLight API
 
 This example demonstrates the simplest way to download videos
-using the PHShorts API.
+using the RedLight API.
 """
 
-from PHShorts import DownloadVideo, GetVideoInfo
+from RedLight import DownloadVideo, GetVideoInfo
 
 # Example PornHub Shorts URL (replace with actual URL)
 VIDEO_URL = "https://www.pornhub.com/view_video.php?viewkey=your_video_key_here"
 
 
 def main():
-    print("=== PHShorts API - Basic Usage ===\n")
+    print("=== RedLight API - Basic Usage ===\n")
     
     # 1. Get video information first
     print("📋 Fetching video information...")

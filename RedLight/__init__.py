@@ -1,8 +1,8 @@
 """
-PH Shorts Downloader - Download Shorts from PornHub with ease!
+RedLight DL - Professional Adult Content Downloader
 
-A lightweight and powerful alternative to yt-dlp for PornHub Shorts.
-Now with programmable API support for building custom scripts and bots!
+A powerful and feature-rich downloader for adult content.
+Includes programmable API support for building custom scripts and bots!
 """
 
 # Core downloader class (for advanced usage)
@@ -30,8 +30,8 @@ from .search import PornHubSearch
 from .async_downloader import AsyncVideoDownloader
 
 __version__ = "1.0.7"
-__author__ = "PH Shorts DL Team"
-__description__ = "Download PornHub Shorts videos with a beautiful CLI interface"
+__author__ = "RedLight Team"
+__description__ = "RedLight DL - Professional adult content downloader with CLI & API"
 
 __all__ = [
     # Main API

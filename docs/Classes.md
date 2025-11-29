@@ -1,6 +1,6 @@
-# 📦 Classes Documentation
+﻿# 📦 Classes Documentation
 
-This document provides detailed documentation for all classes in the PHShorts library.
+This document provides detailed documentation for all classes in the RedLight library.
 
 ## Table of Contents
 
@@ -89,7 +89,7 @@ def list_qualities(self, url: str) -> List[int]
 #### Basic Usage
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 
 # Initialize downloader
 downloader = VideoDownloader(output_dir="./my_videos")
@@ -106,7 +106,7 @@ print(f"Downloaded: {video_path}")
 #### With Progress Tracking
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 
 def on_progress(downloaded, total):
     percent = (downloaded / total) * 100
@@ -122,7 +122,7 @@ video_path = downloader.download(
 #### With Proxy
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 
 # Use proxy for downloads
 downloader = VideoDownloader(
@@ -136,7 +136,7 @@ video_path = downloader.download("https://www.pornhub.com/view_video.php?viewkey
 #### Check Info Before Download
 
 ```python
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 
 downloader = VideoDownloader()
 
@@ -241,7 +241,7 @@ def QueueSize(self) -> int
 #### Sequential Download
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 urls = [
     "https://www.pornhub.com/view_video.php?viewkey=xxxxx",
@@ -260,7 +260,7 @@ print(f"Downloaded {len(results)} videos")
 #### Concurrent Download
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 urls = [
     "https://www.pornhub.com/view_video.php?viewkey=xxxxx",
@@ -282,7 +282,7 @@ results = downloader.DownloadAll()
 #### With Callbacks
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 
 def on_progress(completed, total, current_url):
     print(f"[{completed}/{total}] Downloading: {current_url}")
@@ -308,7 +308,7 @@ print(f"\nTotal downloads: {len(results)}/{len(urls)}")
 #### Progress Bar Example
 
 ```python
-from PHShorts import BatchDownloader
+from RedLight import BatchDownloader
 from tqdm import tqdm
 
 urls = ["url1", "url2", "url3"]  # Your URLs here
@@ -367,7 +367,7 @@ def GetChannelVideos(
 #### Download from Channel
 
 ```python
-from PHShorts import PlaylistDownloader, BatchDownloader
+from RedLight import PlaylistDownloader, BatchDownloader
 
 # Get videos from channel
 playlist = PlaylistDownloader()
@@ -384,7 +384,7 @@ results = downloader.DownloadAll()
 #### With URL
 
 ```python
-from PHShorts import PlaylistDownloader
+from RedLight import PlaylistDownloader
 
 playlist = PlaylistDownloader()
 
@@ -470,7 +470,7 @@ def Compress(
 #### Convert Format
 
 ```python
-from PHShorts import VideoConverter
+from RedLight import VideoConverter
 
 converter = VideoConverter()
 
@@ -490,7 +490,7 @@ print(f"Converted: {output}")
 #### Compress Video
 
 ```python
-from PHShorts import VideoConverter
+from RedLight import VideoConverter
 
 converter = VideoConverter()
 
@@ -505,7 +505,7 @@ print(f"Compressed: {compressed}")
 #### Extract Audio
 
 ```python
-from PHShorts import VideoConverter
+from RedLight import VideoConverter
 
 converter = VideoConverter()
 
@@ -520,7 +520,7 @@ print(f"Audio extracted: {audio}")
 #### Combined Operations
 
 ```python
-from PHShorts import DownloadVideo, VideoConverter
+from RedLight import DownloadVideo, VideoConverter
 
 # Download video
 video_path = DownloadVideo(url, keep_ts=True)
@@ -606,7 +606,7 @@ def SetThumbnail(
 #### Set Metadata
 
 ```python
-from PHShorts import MetadataEditor
+from RedLight import MetadataEditor
 
 editor = MetadataEditor()
 
@@ -626,7 +626,7 @@ print(f"Metadata updated: {output}")
 #### Set Thumbnail
 
 ```python
-from PHShorts import MetadataEditor
+from RedLight import MetadataEditor
 
 editor = MetadataEditor()
 
@@ -642,7 +642,7 @@ print(f"Thumbnail added: {output}")
 #### Combined Metadata Operations
 
 ```python
-from PHShorts import DownloadVideo, MetadataEditor
+from RedLight import DownloadVideo, MetadataEditor
 
 # Download video
 video_path = DownloadVideo(url)
@@ -708,7 +708,7 @@ def search(
 #### Basic Search
 
 ```python
-from PHShorts import PornHubSearch
+from RedLight import PornHubSearch
 
 searcher = PornHubSearch()
 
@@ -725,7 +725,7 @@ for video in results:
 #### Filtered Search
 
 ```python
-from PHShorts import PornHubSearch
+from RedLight import PornHubSearch
 
 searcher = PornHubSearch()
 
@@ -742,7 +742,7 @@ print(f"Found {len(results)} short videos")
 #### Search and Download
 
 ```python
-from PHShorts import PornHubSearch, DownloadVideo
+from RedLight import PornHubSearch, DownloadVideo
 
 searcher = PornHubSearch()
 
@@ -801,7 +801,7 @@ async def get_info(self, url: str) -> Dict[str, Union[str, List[int]]]
 
 ```python
 import asyncio
-from PHShorts import AsyncVideoDownloader
+from RedLight import AsyncVideoDownloader
 
 async def main():
     async with AsyncVideoDownloader() as downloader:
@@ -824,7 +824,7 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from PHShorts import AsyncVideoDownloader
+from RedLight import AsyncVideoDownloader
 
 async def download_video(downloader, url):
     try:

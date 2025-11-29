@@ -1,7 +1,7 @@
-"""
-PHShorts Async API - Asynchronous video downloader for bot integration.
+﻿"""
+RedLight Async API - Asynchronous video downloader for bot integration.
 
-This module provides async/await support for integrating PHShorts
+This module provides async/await support for integrating RedLight
 into async applications like Telegram bots, Discord bots, etc.
 """
 
@@ -20,7 +20,7 @@ class AsyncVideoDownloader:
     All blocking I/O operations are run in a thread pool executor.
     
     Example (Telegram Bot):
-        >>> from PHShorts import AsyncVideoDownloader
+        >>> from RedLight import AsyncVideoDownloader
         >>> 
         >>> async def download_for_user(url: str):
         ...     async with AsyncVideoDownloader() as downloader:

@@ -1,10 +1,10 @@
-"""
-Batch Download Example - PHShorts API
+﻿"""
+Batch Download Example - RedLight API
 
 This example shows how to download multiple videos with progress tracking.
 """
 
-from PHShorts import VideoDownloader
+from RedLight import VideoDownloader
 from typing import List
 
 

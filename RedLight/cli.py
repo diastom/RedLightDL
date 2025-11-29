@@ -1,6 +1,6 @@
 
 """
-CLI interface for PH Shorts Downloader using Rich and Click
+CLI interface for RedLight DL using Rich and Click
 """
 
 import sys
@@ -23,16 +23,16 @@ console = Console()
 db = DatabaseManager()
 
 BANNER = """
-[bold cyan]╔════════════════════════════════════════════════════════════════════════════╗[/]
-[bold cyan]║[/]  [bold magenta]██████╗ ██╗  ██╗    ███████╗██╗  ██╗ ██████╗ ██████╗ ████████╗███████╗[/]  [bold cyan]║[/]
-[bold cyan]║[/]  [bold magenta]██╔══██╗██║  ██║    ██╔════╝██║  ██║██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝[/]  [bold cyan]║[/]
-[bold cyan]║[/]  [bold magenta]██████╔╝███████║    ███████╗███████║██║   ██║██████╔╝   ██║   ███████╗[/]  [bold cyan]║[/]
-[bold cyan]║[/]  [bold magenta]██╔═══╝ ██╔══██║    ╚════██║██╔══██║██║   ██║██╔══██╗   ██║   ╚════██║[/]  [bold cyan]║[/]
-[bold cyan]║[/]  [bold magenta]██║     ██║  ██║    ███████║██║  ██║╚██████╔╝██║  ██║   ██║   ███████║[/]  [bold cyan]║[/]
-[bold cyan]║[/]  [bold magenta]╚═╝     ╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝[/]  [bold cyan]║[/]
-[bold cyan]╚════════════════════════════════════════════════════════════════════════════╝[/]
-            [bold yellow]Download PornHub Shorts with Style![/]
-    [dim]version 1.0.6 • Simple & Light[/]
+[bold cyan]╔══════════════════════════════════════════════════════════════════╗[/]
+[bold cyan]║[/]  [bold magenta]██████╗ ███████╗██████╗ ██╗     ██╗ ██████╗ ██╗  ██╗████████╗[/]  [bold cyan]║[/]
+[bold cyan]║[/]  [bold magenta]██╔══██╗██╔════╝██╔══██╗██║     ██║██╔════╝ ██║  ██║╚══██╔══╝[/]  [bold cyan]║[/]
+[bold cyan]║[/]  [bold magenta]██████╔╝█████╗  ██║  ██║██║     ██║██║  ███╗███████║   ██║   [/]  [bold cyan]║[/]
+[bold cyan]║[/]  [bold magenta]██╔══██╗██╔══╝  ██║  ██║██║     ██║██║   ██║██╔══██║   ██║   [/]  [bold cyan]║[/]
+[bold cyan]║[/]  [bold magenta]██║  ██║███████╗██████╔╝███████╗██║╚██████╔╝██║  ██║   ██║   [/]  [bold cyan]║[/]
+[bold cyan]║[/]  [bold magenta]╚═╝  ╚═╝╚══════╝╚═════╝ ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   [/]  [bold cyan]║[/]
+[bold cyan]║[/]          [bold yellow]Professional Adult Content Downloader[/]              [bold cyan]║[/]
+[bold cyan]╚══════════════════════════════════════════════════════════════════╝[/]
+                [dim]version 1.0.7 • RedLight DL[/]
 """
 
 
@@ -47,12 +47,12 @@ def show_version(ctx, param, value):
         return
     
     version_info = Panel(
-        f"[bold cyan]PH Shorts Downloader[/]\n\n"
+        f"[bold cyan]RedLight DL[/]\n\n"
         f"[yellow]Version:[/] [bold white]{__version__}[/]\n"
         f"[yellow]Author:[/] [bold white]{__author__}[/]\n"
         f"[yellow]Description:[/] [dim]{__description__}[/]\n\n"
         f"[dim]For more information, visit:[/]\n"
-        f"[link=https://github.com/diastom/PornHub-Shorts]https://github.com/diastom/PornHub-Shorts[/]",
+        f"[link=https://github.com/diastom/RedLightDL]https://github.com/diastom/RedLightDL[/]",
         title="[bold magenta]📦 Package Info[/]",
         border_style="cyan",
         box=box.ROUNDED,
@@ -563,10 +563,10 @@ def main(url, output, quality, proxy, keep_ts, subs, speed_limit, format, compre
     """
     \b
     ╔═══════════════════════════════════════════════════════╗
-    ║                  PH SHORTS DOWNLOADER                 ║
+    ║                    REDLIGHT DL                        ║
     ╚═══════════════════════════════════════════════════════╝
     
-    Download PornHub Shorts videos with a beautiful interface!
+    Professional adult content downloader with a beautiful interface!
     
     \b
     📖 USAGE:
@@ -631,8 +631,8 @@ def main(url, output, quality, proxy, keep_ts, subs, speed_limit, format, compre
     
     \b
     📚 MORE INFO:
-      GitHub: https://github.com/diastom/PornHub-Shorts
-      Issues: https://github.com/diastom/PornHub-Shorts/issues
+      GitHub: https://github.com/diastom/RedLightDL
+      Issues: https://github.com/diastom/RedLightDL/issues
     """
     
     # Handle search mode
