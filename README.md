@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.7-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.8-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10+-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -102,7 +102,7 @@ You'll get a beautiful interactive menu:
 ║  ╚═╝  ╚═╝╚══════╝╚═════╝ ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝     ║
 ║          Professional Adult Content Downloader                  ║
 ╚══════════════════════════════════════════════════════════════════╝
-                    version 1.0.7 • RedLight DL
+                    version 1.0.8 • RedLight DL
 ```
 
 

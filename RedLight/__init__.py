@@ -29,7 +29,7 @@ from .search import PornHubSearch
 # Async API (for bots and async applications)
 from .async_downloader import AsyncVideoDownloader
 
-__version__ = "1.0.7"
+__version__ = "1.0.8"
 __author__ = "RedLight Team"
 __description__ = "RedLight DL - Professional adult content downloader with CLI & API"
 

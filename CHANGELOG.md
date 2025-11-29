@@ -1,5 +1,46 @@
 ﻿# Release Notes - RedLight DL
 
+## Version 1.0.8 (2025-11-29)
+
+### 🎨 Project Rebranding
+
+#### Complete Package Rename
+- **Package name changed:** `PHShorts` → `RedLight`
+- **Project renamed:** "PH Shorts Downloader" → "RedLight DL"
+- **Repository URL:** `PornHub-Shorts` → `RedLightDL`
+- **Reason:** Expanding to support multiple adult content platforms
+
+#### Updated Branding
+- ✨ New "REDLIGHT" ASCII banner in CLI
+- 📝 Updated all documentation and examples
+- 🔗 All GitHub links point to new repository
+- 📦 Package metadata updated to "RedLight Team"
+
+#### Import Changes
+**Before (v1.0.7):**
+```python
+from PHShorts import DownloadVideo
+```
+
+**After (v1.0.8):**
+```python
+from RedLight import DownloadVideo
+```
+
+#### What Stayed the Same
+- ✅ CLI command: `ph-shorts` (unchanged)
+- ✅ PyPI package name: `ph-shorts` (unchanged)
+- ✅ All functionality works identically
+- ✅ No breaking changes to API structure
+
+### 📚 Documentation Updates
+- Updated README with rebranding notice
+- Updated all documentation files (6 files in `docs/`)
+- Updated all code examples
+- Added migration note for existing users
+
+---
+
 ## Version 1.0.7 (2025-11-29)
 
 ### 🎉 Major New Features
