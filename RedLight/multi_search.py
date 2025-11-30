@@ -25,19 +25,7 @@ class MultiSiteSearch:
         duration: Optional[str] = None,
         on_site_complete: Optional[Callable[[str, int], None]] = None
     ) -> List[Dict[str, Any]]:
-        """
-        Search all sites concurrently and aggregate results.
-        
-        Args:
-            query: Search query
-            page: Page number
-            sort_by: Sort preference (best effort across sites)
-            duration: Duration filter (best effort across sites)
-            on_site_complete: Callback(site_name, result_count) when each site finishes
-        
-        Returns:
-            List of video results from all sites, with 'site' field indicating source
-        """
+        """Search all sites concurrently and aggregate results."""
         all_searchers = self.registry.get_all_searchers()
         all_results = []
         
@@ -80,7 +68,7 @@ class MultiSiteSearch:
         sort_by: str,
         duration: Optional[str]
     ) -> List[Dict[str, Any]]:
-        """Search a single site."""
+
         try:
             # Map common sort options to site-specific ones
             site_sort = sort_by
@@ -97,6 +85,6 @@ class MultiSiteSearch:
             return []
     
     def get_supported_sites(self) -> List[str]:
-        """Get list of all supported site names."""
+
         sites = self.registry.get_all_sites()
         return [site["name"] for site in sites]

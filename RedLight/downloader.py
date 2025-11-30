@@ -9,6 +9,7 @@ import subprocess
 import html
 import time
 import json
+from .converter import VideoConverter
 
 
 class CustomHLSDownloader:
@@ -47,7 +48,6 @@ class CustomHLSDownloader:
         self.session.headers.update(default_headers)
     
     def _parse_speed_limit(self, limit_str: str) -> int:
-        """Parse speed limit string (e.g., '1M', '500K') to bytes per second"""
         limit_str = limit_str.upper().strip()
         
         multipliers = {
@@ -70,12 +70,10 @@ class CustomHLSDownloader:
             return None
 
     def _sanitize_filename(self, title: str) -> str:
-        # Remove site branding
         title = re.sub(r'^Watch the XXX short\s*-\s*', '', title, flags=re.IGNORECASE)
         title = re.sub(r'\s+on\s+Pornhub.*$', '', title, flags=re.IGNORECASE)
         title = re.sub(r'\s*-\s*Pornhub.*$', '', title, flags=re.IGNORECASE)
         
-        # Remove filesystem illegal chars
         cleaned = re.sub(r'[\\/*?:"<>|]', "", title)
         cleaned = " ".join(cleaned.split())
         
@@ -85,7 +83,6 @@ class CustomHLSDownloader:
         return cleaned[:200]
 
     def extract_video_info(self, page_url: str) -> str:
-        """Scrapes the page for title and m3u8 link."""
         
         self.session.headers.update({'Referer': page_url})
         
@@ -94,7 +91,7 @@ class CustomHLSDownloader:
             response.raise_for_status()
             html_content = response.text
             
-            # --- Title Extraction ---
+
             if self.output_name is None:
                 title_match = re.search(r'<meta property="og:title" content="([^"]+)"', html_content)
                 if not title_match:
@@ -110,10 +107,10 @@ class CustomHLSDownloader:
                 if self.output_name.suffix != '.ts':
                     self.output_name = self.output_name.with_suffix('.ts')
 
-            # --- M3U8 Extraction ---
+
             streams = {}
             
-            # Method 1: Try to parse mediaDefinitions from flashvars
+
             media_def_match = re.search(r'mediaDefinitions\s*[:=]\s*(\[.+?\])', html_content)
             if media_def_match:
                 try:
@@ -148,7 +145,7 @@ class CustomHLSDownloader:
                 except Exception as e:
                     pass
 
-            # Method 2: Fallback to regex if no streams found
+
             if not streams:
                 patterns = [
                     r'"videoUrl"\s*:\s*"([^"]+m3u8[^"]*)"',
@@ -238,21 +235,19 @@ class CustomHLSDownloader:
     def download_stream(self, m3u8_url: str, preferred_quality: str = 'best'):
         
         try:
-            # 1. Get Playlist
+
             response = self.session.get(m3u8_url, timeout=10)
             if response.status_code == 403:
                 raise PermissionError("403 Forbidden. Server rejected the request (Check Referer/User-Agent).")
             response.raise_for_status()
             playlist_content = response.text
             
-            # 2. Handle Master Playlist & Quality Selection
             if "#EXT-X-STREAM-INF" in playlist_content:
                 qualities = self._get_qualities(playlist_content, m3u8_url)
                 
                 if not qualities:
-                    pass  # Use raw URL
+                    pass
                 else:
-                    # Sort qualities by resolution (if integer keys)
                     sorted_keys = sorted([k for k in qualities.keys() if isinstance(k, int)], reverse=True)
                     
                     selected_url = None
@@ -263,14 +258,11 @@ class CustomHLSDownloader:
                     elif preferred_quality == 'worst':
                         selected_res = sorted_keys[-1] if sorted_keys else list(qualities.keys())[-1]
                     else:
-                        # Try to find exact match (e.g., '720')
                         try:
                             req_q = int(preferred_quality)
-                            # Find closest match
                             if req_q in qualities:
                                 selected_res = req_q
                             elif sorted_keys:
-                                # Logic: find closest resolution
                                 selected_res = min(sorted_keys, key=lambda x:abs(x-req_q))
                             else:
                                 selected_res = list(qualities.keys())[0]
@@ -279,20 +271,13 @@ class CustomHLSDownloader:
 
                     selected_url = qualities[selected_res]
                     
-                    # Fetch final media playlist
                     response = self.session.get(selected_url)
                     response.raise_for_status()
                     playlist_content = response.text
-                    m3u8_url = selected_url # Update base URL for segments
+                    m3u8_url = selected_url
 
-            # 3. Encryption Check
-            encrypted = "#EXT-X-KEY" in playlist_content
-
-            # 4. Parse Segments
             segments = self._parse_media_playlist(playlist_content, m3u8_url)
             total_segments = len(segments)
-
-            # 5. Download Loop with Progress Bar
             temp_dir = Path("temp_segments")
             if temp_dir.exists():
                 shutil.rmtree(temp_dir)
@@ -327,7 +312,8 @@ class CustomHLSDownloader:
             
             shutil.rmtree(temp_dir)
             
-            return self.convert_to_mp4()
+            converter = VideoConverter()
+            return converter.ConvertTsToMp4(self.output_name, self.keep_ts)
 
         except KeyboardInterrupt:
             raise
@@ -388,64 +374,4 @@ class CustomHLSDownloader:
                     raise Exception(f"Failed to download segment {index} after {retries} retries: {e}")
         raise Exception(f"Failed to download segment after {retries} retries")
 
-    def convert_to_mp4(self):
-        input_file = self.output_name
-        output_file = self.output_name.with_suffix('.mp4')
-        
-        if self.keep_ts:
-            return str(input_file)
 
-        if not shutil.which("ffmpeg"):
-            print("⚠ FFmpeg not found. Keeping .ts file.")
-            return str(input_file)
-
-        # Validate input file exists and has content
-        if not input_file.exists() or input_file.stat().st_size == 0:
-            print(f"⚠ Input file is empty or missing. Cannot convert.")
-            return str(input_file)
-
-        try:
-            # Try direct copy first (fastest)
-            cmd = [
-                'ffmpeg', '-y', '-hide_banner', '-loglevel', 'error',
-                '-i', str(input_file), 
-                '-c', 'copy',
-                str(output_file)
-            ]
-            result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-            
-            # Check if output file was created and has reasonable size
-            if output_file.exists() and output_file.stat().st_size > 0:
-                if input_file.exists():
-                    input_file.unlink()
-                return str(output_file)
-            else:
-                raise subprocess.CalledProcessError(1, cmd)
-                
-        except subprocess.CalledProcessError as e:
-            # Try re-encoding as fallback (slower but more compatible)
-            try:
-                print("⚠ Direct copy failed, trying re-encode...")
-                cmd = [
-                    'ffmpeg', '-y', '-hide_banner', '-loglevel', 'warning',
-                    '-err_detect', 'ignore_err',
-                    '-i', str(input_file),
-                    '-c:v', 'libx264', '-preset', 'ultrafast',
-                    '-c:a', 'aac', '-b:a', '128k',
-                    '-movflags', '+faststart',
-                    str(output_file)
-                ]
-                result = subprocess.run(cmd, check=False, capture_output=True, text=True)
-                
-                if output_file.exists() and output_file.stat().st_size > 0:
-                    if input_file.exists():
-                        input_file.unlink()
-                    return str(output_file)
-                else:
-                    if result.stderr:
-                        print(f"⚠ FFmpeg error: {result.stderr[:200]}")
-            except Exception as ex:
-                print(f"⚠ Re-encode exception: {ex}")
-            
-            print(f"⚠ Failed to convert to MP4. Keeping .ts file.")
-            return str(input_file)

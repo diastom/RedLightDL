@@ -117,7 +117,7 @@ class DatabaseManager:
         console.print(table)
     
     def add_search_entry(self, site: str, query: str, filters: str, results_count: int):
-        """Add a search to history."""
+
         try:
             conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
@@ -131,7 +131,7 @@ class DatabaseManager:
             pass
     
     def get_search_history(self, limit: int = 20) -> list:
-        """Get recent search history."""
+
         try:
             conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
@@ -146,7 +146,7 @@ class DatabaseManager:
             return []
     
     def show_search_history(self, console: Console, limit: int = 20):
-        """Display search history in a formatted table."""
+
         rows = self.get_search_history(limit)
         
         if not rows:

@@ -36,22 +36,7 @@ class MetadataEditor:
         date: Optional[str] = None,
         output_path: Optional[str] = None
     ) -> str:
-        """
-        Set video metadata tags.
-        
-        Args:
-            video_path: Path to input video
-            title: Video title
-            artist: Artist/Author
-            album: Album/Collection
-            description: Video description/comment
-            genre: Genre
-            date: Creation date (YYYY)
-            output_path: Optional output path (default: overwrite input)
-            
-        Returns:
-            Path to modified video
-        """
+        """Set video metadata tags."""
         input_path = Path(video_path)
         if not input_path.exists():
             raise FileNotFoundError(f"Video not found: {video_path}")
@@ -101,17 +86,7 @@ class MetadataEditor:
             raise RuntimeError(f"FFmpeg metadata error: {e.stderr}")
 
     def SetThumbnail(self, video_path: str, thumbnail_path: str, output_path: Optional[str] = None) -> str:
-        """
-        Embed a custom thumbnail into the video.
-        
-        Args:
-            video_path: Path to input video
-            thumbnail_path: Path to image file
-            output_path: Optional output path
-            
-        Returns:
-            Path to modified video
-        """
+        """Embed a custom thumbnail into the video."""
         input_path = Path(video_path)
         thumb_path = Path(thumbnail_path)
         

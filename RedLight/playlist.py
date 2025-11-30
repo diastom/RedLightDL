@@ -30,16 +30,69 @@ class PlaylistDownloader:
         })
     
     def GetChannelVideos(self, target: str, limit: int = 10) -> List[str]:
-        """
-        Get video URLs from a channel or user.
+        """Get video URLs from a channel or user."""
+        if "eporner.com" in target:
+            return self._get_eporner_videos(target, limit)
+        return self._get_pornhub_videos(target, limit)
+
+    def _get_eporner_videos(self, target: str, limit: int) -> List[str]:
+        """Scrape videos from an Eporner channel."""
+        videos = []
+        page = 1
         
-        Args:
-            target: Username, channel name, or full URL
-            limit: Maximum number of videos to retrieve
+        # Ensure URL is correct
+        if not target.startswith("http"):
+            # Assume it's a channel name if not a URL
+            target = f"https://www.eporner.com/channel/{target}/"
             
-        Returns:
-            List of video URLs
-        """
+        print(f"Scanning Eporner: {target}")
+        
+        while len(videos) < limit:
+            try:
+                # Eporner pagination: /channel/name/2/
+                if page > 1:
+                    if target.endswith('/'):
+                        page_url = f"{target}{page}/"
+                    else:
+                        page_url = f"{target}/{page}/"
+                else:
+                    page_url = target
+                    
+                response = self.session.get(page_url, timeout=10)
+                if response.status_code == 404:
+                    break
+                
+                response.raise_for_status()
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                found_on_page = 0
+                
+                # Find video containers
+                for item in soup.find_all('div', class_='mb'):
+                    link = item.find('a', href=True)
+                    if link:
+                        href = link['href']
+                        if '/video-' in href or '/video/' in href:
+                            full_url = urljoin("https://www.eporner.com", href)
+                            if full_url not in videos:
+                                videos.append(full_url)
+                                found_on_page += 1
+                                if len(videos) >= limit:
+                                    break
+                
+                if found_on_page == 0:
+                    break
+                    
+                page += 1
+                
+            except Exception as e:
+                print(f"Error scraping page {page}: {e}")
+                break
+                
+        return videos[:limit]
+
+    def _get_pornhub_videos(self, target: str, limit: int = 10) -> List[str]:
+        """Get video URLs from a channel or user."""
         # Determine URL
         if target.startswith("http"):
             url = target

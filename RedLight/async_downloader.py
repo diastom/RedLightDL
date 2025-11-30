@@ -14,23 +14,7 @@ from .sites import SiteRegistry
 
 
 class AsyncVideoDownloader:
-    """
-    Asynchronous video downloader for integration with async frameworks.
-    
-    Perfect for Telegram bots, Discord bots, and other async applications.
-    All blocking I/O operations are run in a thread pool executor.
-    
-    Example (Telegram Bot):
-        >>> from RedLight import AsyncVideoDownloader
-        >>> 
-        >>> async def download_for_user(url: str):
-        ...     async with AsyncVideoDownloader() as downloader:
-        ...         info = await downloader.get_info(url)
-        ...         print(f"Downloading: {info['title']}")
-        ...         
-        ...         video_path = await downloader.download(url)
-        ...         return video_path
-    """
+    """Asynchronous video downloader for integration with async frameworks."""
     
     def __init__(
         self,
@@ -39,15 +23,7 @@ class AsyncVideoDownloader:
         headers: Optional[Dict[str, str]] = None,
         max_workers: int = 2
     ):
-        """
-        Initialize AsyncVideoDownloader.
-        
-        Args:
-            output_dir: Directory for downloads
-            proxy: HTTP/HTTPS proxy
-            headers: Custom HTTP headers
-            max_workers: Maximum number of concurrent downloads
-        """
+        """Initialize AsyncVideoDownloader."""
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.proxy = proxy
@@ -69,24 +45,7 @@ class AsyncVideoDownloader:
         filename: Optional[str] = None,
         on_progress: Optional[Callable[[int, int], None]] = None
     ) -> str:
-        """
-        Download a video asynchronously.
-        
-        Args:
-            url: Video URL
-            quality: "best", "worst", or specific height
-            filename: Custom filename (optional)
-            on_progress: Progress callback function
-        
-        Returns:
-            Path to downloaded video
-            
-        Example:
-            >>> async def download_video(url):
-            ...     downloader = AsyncVideoDownloader()
-            ...     path = await downloader.download(url)
-            ...     return path
-        """
+        """Download a video asynchronously."""
         loop = asyncio.get_event_loop()
         
         # Run blocking download in thread pool
@@ -128,21 +87,7 @@ class AsyncVideoDownloader:
         )
     
     async def get_info(self, url: str) -> Dict[str, Union[str, List[int]]]:
-        """
-        Get video information asynchronously.
-        
-        Args:
-            url: Video URL
-        
-        Returns:
-            Dictionary with video metadata
-            
-        Example:
-            >>> async def get_video_title(url):
-            ...     downloader = AsyncVideoDownloader()
-            ...     info = await downloader.get_info(url)
-            ...     return info['title']
-        """
+        """Get video information asynchronously."""
         loop = asyncio.get_event_loop()
         
         result = await loop.run_in_executor(
@@ -164,15 +109,7 @@ class AsyncVideoDownloader:
         return downloader.get_info(url)
     
     async def list_qualities(self, url: str) -> List[int]:
-        """
-        List available qualities asynchronously.
-        
-        Args:
-            url: Video URL
-        
-        Returns:
-            List of quality heights
-        """
+        """List available qualities asynchronously."""
         info = await self.get_info(url)
         return info["available_qualities"]
     

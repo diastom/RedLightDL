@@ -17,11 +17,7 @@ from .base import BaseSiteDownloader, BaseSiteSearch
 
 
 class EpornerDownloader(BaseSiteDownloader):
-    """
-    Eporner.com video downloader.
-    
-    Uses direct MP4 downloads with aria2c or multi-threaded Python downloader.
-    """
+    """Eporner.com video downloader."""
     
     def __init__(self):
         self.session = requests.Session()
@@ -43,7 +39,7 @@ class EpornerDownloader(BaseSiteDownloader):
         proxy: Optional[str] = None,
         on_progress: Optional[Callable[[int, int], None]] = None
     ) -> str:
-        """Download video from Eporner."""
+
         # Extract info and get download links
         title, links = self._extract_info(url)
         
@@ -71,7 +67,7 @@ class EpornerDownloader(BaseSiteDownloader):
         return str(output_file)
     
     def get_info(self, url: str) -> Dict[str, Any]:
-        """Extract video information."""
+
         title, links = self._extract_info(url)
         
         # Extract available qualities
@@ -93,22 +89,22 @@ class EpornerDownloader(BaseSiteDownloader):
         }
     
     def list_qualities(self, url: str) -> List[int]:
-        """List available quality options."""
+
         info = self.get_info(url)
         return info["available_qualities"]
     
     @staticmethod
     def is_supported_url(url: str) -> bool:
-        """Check if URL is from Eporner."""
+
         return "eporner.com" in url.lower()
     
     @staticmethod
     def get_site_name() -> str:
-        """Return site identifier."""
+
         return "eporner"
     
     def _extract_info(self, url: str) -> tuple[str, Dict[str, str]]:
-        """Extract video title and download links."""
+
         try:
             response = self.session.get(url)
             response.raise_for_status()
@@ -182,7 +178,7 @@ class EpornerDownloader(BaseSiteDownloader):
             raise RuntimeError(f"Failed to extract video info: {e}")
     
     def _select_quality(self, links: Dict[str, str], quality: str) -> str:
-        """Select best matching quality from available links."""
+
         # Sort qualities: non-AV1 first, then by resolution
         def sort_key(k):
             is_av1 = 1 if "(AV1)" in k else 0
@@ -211,7 +207,7 @@ class EpornerDownloader(BaseSiteDownloader):
                 return sorted_keys[0]
     
     def _get_final_url(self, dload_url: str) -> str:
-        """Resolve final download URL."""
+
         try:
             if "gvideo" in dload_url:
                 return dload_url
@@ -221,7 +217,7 @@ class EpornerDownloader(BaseSiteDownloader):
             return dload_url
     
     def _download_manager(self, url: str, filename: str, on_progress: Optional[Callable] = None):
-        """Download using aria2c or Python downloader."""
+
         if shutil.which("aria2c"):
             success = self._download_with_aria2c(url, filename)
             if success:
@@ -231,7 +227,7 @@ class EpornerDownloader(BaseSiteDownloader):
         self._download_python_multithreaded(url, filename, on_progress)
     
     def _download_with_aria2c(self, url: str, filename: str) -> bool:
-        """Download using aria2c."""
+
         cmd = [
             'aria2c',
             url,
@@ -254,7 +250,7 @@ class EpornerDownloader(BaseSiteDownloader):
             return False
     
     def _download_python_multithreaded(self, url: str, filename: str, on_progress: Optional[Callable], num_threads: int = 16):
-        """Download using Python multi-threading."""
+
         try:
             head = self.session.head(url, allow_redirects=True)
             if 'content-length' not in head.headers:
@@ -295,7 +291,7 @@ class EpornerDownloader(BaseSiteDownloader):
                     pass
     
     def _download_chunk(self, url: str, filename: str, start: int, end: int, index: int) -> int:
-        """Download a file chunk."""
+
         headers = self.session.headers.copy()
         headers['Range'] = f'bytes={start}-{end}'
         
@@ -312,7 +308,7 @@ class EpornerDownloader(BaseSiteDownloader):
         return total_written
     
     def _download_single(self, url: str, filename: str):
-        """Single-threaded download fallback."""
+
         with self.session.get(url, stream=True) as r:
             r.raise_for_status()
             with open(filename, 'wb') as f:
@@ -320,11 +316,11 @@ class EpornerDownloader(BaseSiteDownloader):
                     f.write(chunk)
     
     def _sanitize_filename(self, title: str) -> str:
-        """Clean filename for filesystem."""
+
         return re.sub(r'[\\/*?:"<>|]', "", title)
     
     def _extract_video_id(self, url: str) -> str:
-        """Extract video ID from URL."""
+
         match = re.search(r'/video-([^/]+)/', url)
         if match:
             return match.group(1)
@@ -332,9 +328,7 @@ class EpornerDownloader(BaseSiteDownloader):
 
 
 class EpornerSearch(BaseSiteSearch):
-    """
-    Eporner.com search implementation using web scraping.
-    """
+    """Eporner.com search implementation."""
     
     def __init__(self):
         self.base_url = "https://www.eporner.com"
@@ -352,7 +346,7 @@ class EpornerSearch(BaseSiteSearch):
         duration: Optional[str] = None,
         **kwargs
     ) -> List[Dict[str, Any]]:
-        """Search Eporner for videos."""
+
         try:
             # Build search URL
             search_url = f"{self.base_url}/search/{query}/"
@@ -425,11 +419,11 @@ class EpornerSearch(BaseSiteSearch):
     
     @staticmethod
     def get_site_name() -> str:
-        """Return site identifier."""
+
         return "eporner"
     
     def get_search_filters(self) -> Dict[str, List[str]]:
-        """Get available search filters."""
+
         return {
             "sort_by": ["relevance", "views", "rating", "date"],
             "duration": []  # Eporner doesn't have duration filters in basic search

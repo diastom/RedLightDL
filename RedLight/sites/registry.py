@@ -4,6 +4,9 @@ Site Registry - Manages all supported sites and provides auto-detection.
 
 from typing import Dict, List, Optional, Type
 from .base import BaseSiteDownloader, BaseSiteSearch
+from .pornhub import PornHubDownloader, PornHubSearch
+from .eporner import EpornerDownloader, EpornerSearch
+from .spankbang import SpankBangDownloader, SpankBangSearch
 
 
 class SiteRegistry:
@@ -20,6 +23,10 @@ class SiteRegistry:
         if cls._instance is None:
             cls._instance = super(SiteRegistry, cls).__new__(cls)
             cls._instance._sites = {}
+            # Auto-register sites
+            cls._instance.register_site("pornhub", PornHubDownloader, PornHubSearch)
+            cls._instance.register_site("eporner", EpornerDownloader, EpornerSearch)
+            cls._instance.register_site("spankbang", SpankBangDownloader, SpankBangSearch)
         return cls._instance
     
     def register_site(
@@ -28,14 +35,7 @@ class SiteRegistry:
         downloader_class: Type[BaseSiteDownloader],
         search_class: Type[BaseSiteSearch]
     ) -> None:
-        """
-        Register a new site with its downloader and search classes.
-        
-        Args:
-            name: Site identifier (e.g., "pornhub", "eporner")
-            downloader_class: Class implementing BaseSiteDownloader
-            search_class: Class implementing BaseSiteSearch
-        """
+        """Register a new site with its downloader and search classes."""
         self._sites[name.lower()] = {
             "name": name.lower(),
             "downloader": downloader_class,
@@ -43,15 +43,7 @@ class SiteRegistry:
         }
     
     def get_downloader_for_url(self, url: str) -> Optional[BaseSiteDownloader]:
-        """
-        Auto-detect site from URL and return appropriate downloader instance.
-        
-        Args:
-            url: Video URL
-        
-        Returns:
-            Instance of appropriate downloader, or None if unsupported
-        """
+        """Auto-detect site from URL and return appropriate downloader instance."""
         for site_info in self._sites.values():
             downloader_class = site_info["downloader"]
             if downloader_class.is_supported_url(url):
@@ -59,44 +51,21 @@ class SiteRegistry:
         return None
     
     def get_downloader_by_name(self, site_name: str) -> Optional[BaseSiteDownloader]:
-        """
-        Get downloader instance by site name.
-        
-        Args:
-            site_name: Site identifier
-        
-        Returns:
-            Instance of downloader, or None if not found
-        """
+        """Get downloader instance by site name."""
         site_info = self._sites.get(site_name.lower())
         if site_info:
             return site_info["downloader"]()
         return None
     
     def get_search_by_name(self, site_name: str) -> Optional[BaseSiteSearch]:
-        """
-        Get search instance by site name.
-        
-        Args:
-            site_name: Site identifier
-        
-        Returns:
-            Instance of search, or None if not found
-        """
+        """Get search instance by site name."""
         site_info = self._sites.get(site_name.lower())
         if site_info:
             return site_info["search"]()
         return None
     
     def get_all_sites(self) -> List[Dict[str, str]]:
-        """
-        Get list of all registered sites.
-        
-        Returns:
-            List of dictionaries with site information:
-                - name: Site identifier
-                - display_name: Human-readable name
-        """
+        """Get list of all registered sites."""
         sites = []
         for name, info in self._sites.items():
             sites.append({
@@ -106,27 +75,14 @@ class SiteRegistry:
         return sorted(sites, key=lambda x: x["name"])
     
     def get_all_searchers(self) -> Dict[str, BaseSiteSearch]:
-        """
-        Get all search instances for searching across all sites.
-        
-        Returns:
-            Dictionary mapping site names to search instances
-        """
+        """Get all search instances for searching across all sites."""
         return {
             name: info["search"]()
             for name, info in self._sites.items()
         }
     
     def detect_site(self, url: str) -> Optional[str]:
-        """
-        Detect site name from URL.
-        
-        Args:
-            url: Video URL
-        
-        Returns:
-            Site name if detected, None otherwise
-        """
+        """Detect site name from URL."""
         for site_info in self._sites.values():
             downloader_class = site_info["downloader"]
             if downloader_class.is_supported_url(url):
@@ -134,15 +90,7 @@ class SiteRegistry:
         return None
     
     def is_supported_url(self, url: str) -> bool:
-        """
-        Check if URL is supported by any registered site.
-        
-        Args:
-            url: URL to check
-        
-        Returns:
-            True if supported, False otherwise
-        """
+        """Check if URL is supported by any registered site."""
         return self.detect_site(url) is not None
     
     @property

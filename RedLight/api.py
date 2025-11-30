@@ -165,18 +165,7 @@ class VideoDownloader:
         keep_ts: bool = False,
         on_progress: Optional[Callable[[int, int], None]] = None
     ) -> str:
-        """
-        Download a video.
-        
-        Args:
-            url: Video URL
-            quality: "best", "worst", or specific height (e.g., "720")
-            filename: Custom filename (optional)
-            on_progress: Progress callback function(downloaded, total)
-        
-        Returns:
-            Path to downloaded video
-        """
+        """Download a video."""
         return DownloadVideo(
             url=url,
             output_dir=str(self.output_dir),
@@ -187,25 +176,9 @@ class VideoDownloader:
         )
     
     def get_info(self, url: str) -> Dict[str, Union[str, List[int]]]:
-        """
-        Get video information without downloading.
-        
-        Args:
-            url: Video URL
-        
-        Returns:
-            Dictionary with title, available_qualities, and video_id
-        """
+        """Get video information without downloading."""
         return GetVideoInfo(url)
     
     def list_qualities(self, url: str) -> List[int]:
-        """
-        List available quality options.
-        
-        Args:
-            url: Video URL
-        
-        Returns:
-            List of quality heights
-        """
+        """List available quality options."""
         return ListAvailableQualities(url)

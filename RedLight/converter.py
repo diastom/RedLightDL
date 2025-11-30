@@ -44,30 +44,7 @@ class VideoConverter:
         audio_only: bool = False,
         output_file: Optional[str] = None
     ) -> str:
-        """
-        Convert video format or compress video.
-        
-        Args:
-            input_file: Path to input video file
-            output_format: Output format ('mp4', 'webm', 'mkv', 'mp3')
-            compress_quality: Compression quality 0-100 (lower = more compression, smaller file)
-                             If None, no compression applied
-            audio_only: If True, extract audio as mp3 (overrides output_format)
-            output_file: Custom output filename (if None, auto-generated)
-        
-        Returns:
-            Path to converted video file
-            
-        Example:
-            >>> # Convert to WebM
-            >>> converter.Convert("video.mp4", output_format="webm")
-            
-            >>> # Compress video
-            >>> converter.Convert("video.mp4", compress_quality=70)
-            
-            >>> # Extract audio
-            >>> converter.Convert("video.mp4", audio_only=True)
-        """
+        """Convert video format or compress video."""
         input_path = Path(input_file)
         
         if not input_path.exists():
@@ -136,17 +113,7 @@ class VideoConverter:
         quality: int = 70,
         output_file: Optional[str] = None
     ) -> str:
-        """
-        Compress video file.
-        
-        Args:
-            input_file: Path to input video
-            quality: Quality 0-100 (higher = better quality, larger file)
-            output_file: Optional output filename
-        
-        Returns:
-            Path to compressed file
-        """
+        """Compress video file."""
         return self.Convert(
             input_file=input_file,
             compress_quality=quality,
@@ -158,16 +125,7 @@ class VideoConverter:
         input_file: str,
         output_file: Optional[str] = None
     ) -> str:
-        """
-        Extract audio from video as MP3.
-        
-        Args:
-            input_file: Path to input video
-            output_file: Optional output filename
-        
-        Returns:
-            Path to audio file
-        """
+        """Extract audio from video as MP3."""
         return self.Convert(
             input_file=input_file,
             audio_only=True,
@@ -178,3 +136,76 @@ class VideoConverter:
     def IsFFmpegAvailable() -> bool:
         """Check if FFmpeg is available."""
         return shutil.which("ffmpeg") is not None
+
+    def ConvertTsToMp4(self, input_file: Path, keep_ts: bool = False) -> str:
+        """
+        Convert .ts file to .mp4 with fallback logic.
+        
+        Args:
+            input_file: Path to input .ts file
+            keep_ts: If True, returns original file path without conversion
+            
+        Returns:
+            Path to output file (either .mp4 or original .ts)
+        """
+        input_path = Path(input_file)
+        
+        if keep_ts:
+            return str(input_path)
+
+        if not self.ffmpeg_available:
+            print("⚠ FFmpeg not found. Keeping .ts file.")
+            return str(input_path)
+
+        # Validate input file exists and has content
+        if not input_path.exists() or input_path.stat().st_size == 0:
+            print(f"⚠ Input file is empty or missing. Cannot convert.")
+            return str(input_path)
+
+        output_path = input_path.with_suffix('.mp4')
+        
+        try:
+            # Try direct copy first (fastest)
+            cmd = [
+                'ffmpeg', '-y', '-hide_banner', '-loglevel', 'error',
+                '-i', str(input_path), 
+                '-c', 'copy',
+                str(output_path)
+            ]
+            subprocess.run(cmd, check=True, capture_output=True, text=True)
+            
+            # Check if output file was created and has reasonable size
+            if output_path.exists() and output_path.stat().st_size > 0:
+                if input_path.exists():
+                    input_path.unlink()
+                return str(output_path)
+            else:
+                raise subprocess.CalledProcessError(1, cmd)
+                
+        except subprocess.CalledProcessError:
+            # Try re-encoding as fallback (slower but more compatible)
+            try:
+                print("⚠ Direct copy failed, trying re-encode...")
+                cmd = [
+                    'ffmpeg', '-y', '-hide_banner', '-loglevel', 'warning',
+                    '-err_detect', 'ignore_err',
+                    '-i', str(input_path),
+                    '-c:v', 'libx264', '-preset', 'ultrafast',
+                    '-c:a', 'aac', '-b:a', '128k',
+                    '-movflags', '+faststart',
+                    str(output_path)
+                ]
+                result = subprocess.run(cmd, check=False, capture_output=True, text=True)
+                
+                if output_path.exists() and output_path.stat().st_size > 0:
+                    if input_path.exists():
+                        input_path.unlink()
+                    return str(output_path)
+                else:
+                    if result.stderr:
+                        print(f"⚠ FFmpeg error: {result.stderr[:200]}")
+            except Exception as ex:
+                print(f"⚠ Re-encode exception: {ex}")
+            
+            print(f"⚠ Failed to convert to MP4. Keeping .ts file.")
+            return str(input_path)

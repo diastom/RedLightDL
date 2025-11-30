@@ -1,10 +1,3 @@
-"""
-RedLight DL - Professional Adult Content Downloader
-
-A powerful and feature-rich downloader for adult content.
-Includes programmable API support for building custom scripts and bots!
-"""
-
 # Core downloader class (for advanced usage)
 from .downloader import CustomHLSDownloader
 
@@ -33,11 +26,10 @@ from .async_downloader import AsyncVideoDownloader
 from .sites import SiteRegistry
 from .sites.pornhub import PornHubDownloader
 from .sites.eporner import EpornerDownloader, EpornerSearch
+from .sites.spankbang import SpankBangDownloader, SpankBangSearch
 from .multi_search import MultiSiteSearch
 
-__version__ = "1.0.11"
-__author__ = "RedLight Team"
-__description__ = "RedLight DL - Professional adult content downloader with CLI & API"
+from .version import __version__, __author__, __description__
 
 __all__ = [
     # Main API

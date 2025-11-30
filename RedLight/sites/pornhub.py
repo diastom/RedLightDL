@@ -13,11 +13,7 @@ from ..search import PornHubSearch as OriginalPornHubSearch
 
 
 class PornHubDownloader(BaseSiteDownloader):
-    """
-    PornHub.com video downloader using HLS streaming.
-    
-    Wraps the existing CustomHLSDownloader to fit the new architecture.
-    """
+    """PornHub.com video downloader using HLS streaming."""
     
     def download(
         self,
@@ -29,7 +25,7 @@ class PornHubDownloader(BaseSiteDownloader):
         proxy: Optional[str] = None,
         on_progress: Optional[Callable[[int, int], None]] = None
     ) -> str:
-        """Download video from PornHub using HLS streaming."""
+
         # Prepare output path
         output_path = Path(output_dir)
         output_path.mkdir(parents=True, exist_ok=True)
@@ -70,7 +66,7 @@ class PornHubDownloader(BaseSiteDownloader):
         return str(result_path)
     
     def get_info(self, url: str) -> Dict[str, Any]:
-        """Extract video metadata."""
+
         downloader = CustomHLSDownloader()
         
         # Extract streams and title
@@ -95,28 +91,24 @@ class PornHubDownloader(BaseSiteDownloader):
         }
     
     def list_qualities(self, url: str) -> List[int]:
-        """List available quality options."""
+
         info = self.get_info(url)
         return info["available_qualities"]
     
     @staticmethod
     def is_supported_url(url: str) -> bool:
-        """Check if URL is from PornHub."""
+
         url_lower = url.lower()
         return "pornhub.com" in url_lower or "pornhubpremium.com" in url_lower
     
     @staticmethod
     def get_site_name() -> str:
-        """Return site identifier."""
+
         return "pornhub"
 
 
 class PornHubSearch(BaseSiteSearch):
-    """
-    PornHub.com search implementation.
-    
-    Wraps existing PornHubSearch class to fit new architecture.
-    """
+    """PornHub.com search implementation."""
     
     def __init__(self):
         self.searcher = OriginalPornHubSearch()
@@ -129,7 +121,7 @@ class PornHubSearch(BaseSiteSearch):
         duration: Optional[str] = None,
         **kwargs
     ) -> List[Dict[str, Any]]:
-        """Search PornHub for videos."""
+
         try:
             results = self.searcher.search(query, page=page, sort_by=sort_by, duration=duration)
             
@@ -143,11 +135,11 @@ class PornHubSearch(BaseSiteSearch):
     
     @staticmethod
     def get_site_name() -> str:
-        """Return site identifier."""
+
         return "pornhub"
     
     def get_search_filters(self) -> Dict[str, List[str]]:
-        """Get available search filters."""
+
         return {
             "sort_by": ["mostviewed", "toprated", "newest"],
             "duration": ["short", "medium", "long"]

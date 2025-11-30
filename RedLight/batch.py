@@ -55,21 +55,11 @@ class BatchDownloader:
         self.urls: List[str] = []
         
     def AddUrls(self, urls: List[str]) -> None:
-        """
-        Add URLs to the download queue.
-        
-        Args:
-            urls: List of video URLs to download
-        """
+        """Add URLs to the download queue."""
         self.urls.extend(urls)
     
     def AddUrl(self, url: str) -> None:
-        """
-        Add a single URL to the download queue.
-        
-        Args:
-            url: Video URL to download
-        """
+        """Add a single URL to the download queue."""
         self.urls.append(url)
     
     def ClearQueue(self) -> None:
@@ -82,23 +72,7 @@ class BatchDownloader:
         on_complete: Optional[Callable[[str, str], None]] = None,
         on_error: Optional[Callable[[str, Exception], None]] = None
     ) -> Dict[str, str]:
-        """
-        Download all queued videos.
-        
-        Args:
-            on_progress: Callback(completed, total, current_url) called after each video
-            on_complete: Callback(url, path) called when a video downloads successfully
-            on_error: Callback(url, exception) called when a download fails
-        
-        Returns:
-            Dictionary mapping successful URLs to their file paths
-            
-        Example:
-            >>> def progress(completed, total, url):
-            ...     print(f"[{completed}/{total}] Downloading: {url}")
-            >>> 
-            >>> results = downloader.DownloadAll(on_progress=progress)
-        """
+        """Download all queued videos."""
         if not self.urls:
             return {}
         
