@@ -30,33 +30,79 @@ pip install -e .
 
 ---
 
+## 🌐 Multi-Site Support
+
+RedLight supports **4 major adult content sites** with automatic detection:
+
+| Site | Technology | Max Quality | Special Features |
+|------|------------|-------------|------------------|
+| **PornHub** | HLS Streaming | 1080p | Playlists, Advanced Search |
+| **Eporner** | Direct MP4 + aria2c | 1080p | Ultra-fast downloads |
+| **Spankbang** | Hybrid MP4/HLS | 4K | Intelligent format selection |
+| **XVideos** | Multi-quality MP4/HLS | 1080p | Intelligent fallback |
+
+**Best Part**: You don't need to do anything special! Just paste any supported URL and RedLight automatically uses the correct downloader.
+
+---
+
 ## Your First Download
 
-### Option 1: Simple One-Liner
+### Option 1: Simple One-Liner (Works with ANY Site!)
 
 ```python
 from RedLight import DownloadVideo
 
-# Download a video (simplest way)
+# Works with PornHub
 video_path = DownloadVideo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
+
+# Works with Eporner (ultra-fast with aria2c)
+video_path = DownloadVideo("https://www.eporner.com/video-xxxxx/title")
+
+# Works with Spankbang (supports 4K!)
+video_path = DownloadVideo("https://spankbang.com/xxxxx/video/title")
+
+# Works with XVideos
+video_path = DownloadVideo("https://www.xvideos.com/video.xxxxx/title")
+
 print(f"Downloaded: {video_path}")
 ```
 
-That's it! The video will be saved to `./downloads/` with auto-detected title.
+That's it! RedLight automatically detects the site and uses the optimal downloader.
 
-### Option 2: With Custom Options
+### Option 2: With Custom Options (All Sites)
 
 ```python
 from RedLight import DownloadVideo
 
+# Same API works for all sites!
 video_path = DownloadVideo(
-    url="https://www.pornhub.com/view_video.php?viewkey=xxxxx",
+    url="https://www.pornhub.com/view_video.php?viewkey=xxxxx",  # Or any other site
     output_dir="./my_videos",    # Custom directory
     quality="720",                # Specific quality
     filename="my_video.mp4"       # Custom filename
 )
 
 print(f"Video saved to: {video_path}")
+```
+
+### Option 3: Multi-Site Batch Download
+
+```python
+from RedLight import BatchDownloader
+
+# Mix URLs from different sites - RedLight handles it!
+urls = [
+    "https://www.pornhub.com/view_video.php?viewkey=xxxxx",
+    "https://www.eporner.com/video-xxxxx/title",
+    "https://spankbang.com/xxxxx/video/title",
+    "https://www.xvideos.com/video.xxxxx/title"
+]
+
+downloader = BatchDownloader(concurrent=True, max_workers=4)
+downloader.AddUrls(urls)
+results = downloader.DownloadAll()
+
+print(f"Downloaded {len(results)} videos from multiple sites!")
 ```
 
 ---
@@ -140,6 +186,7 @@ results = downloader.DownloadAll()
 
 ### 5. Search and Download
 
+#### Search Single Site (PornHub)
 ```python
 from RedLight import PornHubSearch, DownloadVideo
 
@@ -151,6 +198,26 @@ results = searcher.search("query", sort_by="toprated")
 for video in results[:3]:
     print(f"Downloading: {video['title']}")
     DownloadVideo(video['url'])
+```
+
+#### Search All Sites
+```python
+from RedLight import MultiSiteSearch, DownloadVideo
+
+# Search across all 4 sites simultaneously!
+searcher = MultiSiteSearch()
+results = searcher.search_all("query")
+
+print(f"Found {len(results)} videos across all sites")
+
+# Download top result from each site
+downloaded = {}
+for video in results:
+    site = video['site']
+    if site not in downloaded:
+        print(f"Downloading from {site}: {video['title']}")
+        DownloadVideo(video['url'])
+        downloaded[site] = video
 ```
 
 ### 6. Convert Format

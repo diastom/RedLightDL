@@ -25,25 +25,28 @@ def DownloadVideo(
     keep_ts: bool = False,
     on_progress: Optional[Callable[[int, int], None]] = None
 ) -> str
-```
-
-### Parameters
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `url` | `str` | Required | Video URL (e.g., `https://pornhub.com/view_video.php?viewkey=xxxxx`) |
-| `output_dir` | `str` | `"./downloads"` | Directory to save the downloaded video |
-| `quality` | `str` | `"best"` | Video quality: `"best"`, `"worst"`, or specific height like `"720"`, `"1080"` |
-| `filename` | `str \| None` | `None` | Custom filename (optional, auto-detected from video title if not provided) |
-| `keep_ts` | `bool` | `False` | If `True`, keeps the original `.ts` file (skips MP4 conversion) |
-| `on_progress` | `Callable \| None` | `None` | Callback function `(downloaded_segments, total_segments)` for progress tracking |
-
-### Returns
-
-- **Type:** `str`
-- **Description:** Absolute path to the downloaded video file
-
 ### Examples
+
+#### Multi-Site Support (Automatic Detection)
+
+```python
+from RedLight import DownloadVideo
+
+# Works with PornHub
+video_path = DownloadVideo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
+
+# Works with Eporner (ultra-fast with aria2c)
+video_path = DownloadVideo("https://www.eporner.com/video-xxxxx/title")
+
+# Works with Spankbang (supports 4K!)
+video_path = DownloadVideo("https://spankbang.com/xxxxx/video/title")
+
+# Works with XVideos
+video_path = DownloadVideo("https://www.xvideos.com/video.xxxxx/title")
+
+# RedLight automatically detects the site and uses the optimal downloader!
+print(f"Video saved to: {video_path}")
+```
 
 #### Basic Download
 ```python

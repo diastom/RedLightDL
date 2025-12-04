@@ -4,6 +4,7 @@ Practical, real-world examples for using RedLight in your projects.
 
 ## Table of Contents
 
+- [Multi-Site Downloads](#multi-site-downloads)
 - [Basic Downloads](#basic-downloads)
 - [Batch Processing](#batch-processing)
 - [Channel Management](#channel-management)
@@ -12,6 +13,296 @@ Practical, real-world examples for using RedLight in your projects.
 - [Automation Scripts](#automation-scripts)
 - [Bot Integration](#bot-integration)
 - [Error Handling](#error-handling)
+
+---
+
+## Multi-Site Downloads
+
+RedLight supports 4 major adult content sites: **PornHub**, **Eporner**, **Spankbang**, and **XVideos**.
+
+### Automatic Site Detection
+
+RedLight automatically detects which site you're downloading from:
+
+```python
+from RedLight import DownloadVideo
+
+# All use the same simple API!
+DownloadVideo("https://www.pornhub.com/view_video.php?viewkey=xxxxx")
+DownloadVideo("https://www.eporner.com/video-xxxxx/title")
+DownloadVideo("https://spankbang.com/xxxxx/video/title")
+DownloadVideo("https://www.xvideos.com/video.xxxxx/title")
+
+# RedLight uses the optimal downloader for each site
+```
+
+### Site-Specific Examples
+
+#### PornHub - HLS Streaming
+
+```python
+from RedLight import DownloadVideo, GetVideoInfo
+
+# Get video info
+url = "https://www.pornhub.com/view_video.php?viewkey=xxxxx"
+info = GetVideoInfo(url)
+
+print(f"Title: {info['title']}")
+print(f"Qualities: {info['available_qualities']}")  # [240, 480, 720, 1080]
+
+# Download in 1080p
+video_path = DownloadVideo(url, quality="1080")
+print(f"Downloaded: {video_path}")
+```
+
+#### Eporner - Ultra-Fast with aria2c
+
+```python
+from RedLight import DownloadVideo
+
+# Eporner uses aria2c for lightning-fast downloads
+url = "https://www.eporner.com/video-xxxxx/title"
+
+# Automatically uses aria2c download manager
+video_path = DownloadVideo(url)
+
+print(f"Downloaded at maximum speed: {video_path}")
+```
+
+#### Spankbang - 4K Support
+
+```python
+from RedLight import DownloadVideo, GetVideoInfo
+
+url = "https://spankbang.com/xxxxx/video/title"
+
+# Check if 4K is available
+info = GetVideoInfo(url)
+print(f"Available qualities: {info['available_qualities']}")
+
+# Download best quality (may be 4K!)
+video_path = DownloadVideo(url, quality="best")
+print(f"Downloaded: {video_path}")
+```
+
+#### XVideos - Intelligent Fallback
+
+```python
+from RedLight import DownloadVideo
+
+url = "https://www.xvideos.com/video.xxxxx/title"
+
+# XVideos downloader automatically handles MP4/HLS fallback
+video_path = DownloadVideo(url, quality="720")
+
+print(f"Downloaded: {video_path}")
+```
+
+### Mixed Site Batch Download
+
+Download from multiple sites in one batch:
+
+```python
+from RedLight import BatchDownloader
+
+# Mix URLs from all supported sites
+urls = [
+    "https://www.pornhub.com/view_video.php?viewkey=xxxxx",
+    "https://www.eporner.com/video-xxxxx/title",
+    "https://spankbang.com/xxxxx/video/title",
+    "https://www.xvideos.com/video.xxxxx/title",
+    "https://www.pornhub.com/view_video.php?viewkey=yyyyy",
+    "https://www.eporner.com/video-yyyyy/another-title"
+]
+
+# RedLight handles all sites automatically
+downloader = BatchDownloader(
+    concurrent=True,
+    max_workers=4,
+    quality="720"
+)
+
+downloader.AddUrls(urls)
+results = downloader.DownloadAll()
+
+print(f"✓ Downloaded {len(results)} videos from multiple sites")
+```
+
+### Multi-Site Search
+
+#### Search All Sites Simultaneously
+
+```python
+from RedLight import MultiSiteSearch, DownloadVideo
+
+# Search across all 4 sites at once
+searcher = MultiSiteSearch()
+results = searcher.search_all("your search term")
+
+print(f"Found {len(results)} videos total")
+
+# Group by site
+by_site = {}
+for video in results:
+    site = video['site']
+    if site not in by_site:
+        by_site[site] = []
+    by_site[site].append(video)
+
+# Display results per site
+for site, videos in by_site.items():
+    print(f"\n{site}: {len(videos)} results")
+    for v in videos[:3]:  # Top 3 from each site
+        print(f"  - {v['title']}")
+
+# Download top result from each site
+for site, videos in by_site.items():
+    if videos:
+        print(f"\nDownloading from {site}: {videos[0]['title']}")
+        DownloadVideo(videos[0]['url'])
+```
+
+#### Site-Specific Search
+
+```python
+from RedLight import (
+    PornHubSearch,
+    EpornerSearch,
+    SpankBangSearch,
+    XVideosSearch
+)
+
+query = "search term"
+
+# Search each site separately with site-specific options
+ph_search = PornHubSearch()
+ph_results = ph_search.search(query, sort_by="toprated", duration="medium")
+
+ep_search = EpornerSearch()
+ep_results = ep_search.search(query)
+
+sb_search = SpankBangSearch()
+sb_results = sb_search.search(query)
+
+xv_search = XVideosSearch()
+xv_results = xv_search.search(query)
+
+print(f"Results:")
+print(f"  PornHub: {len(ph_results)}")
+print(f"  Eporner: {len(ep_results)}")
+print(f"  Spankbang: {len(sb_results)}")
+print(f"  XVideos: {len(xv_results)}")
+```
+
+### Organized Multi-Site Downloads
+
+Download and organize videos by site:
+
+```python
+from RedLight import SiteRegistry, DownloadVideo
+from pathlib import Path
+
+def download_and_organize(urls):
+    """Download videos and organize by site"""
+    
+    registry = SiteRegistry()
+    results = {"success": {}, "failed": []}
+    
+    for url in urls:
+        # Detect site
+        site_name = registry.detect_site(url)
+        
+        if not site_name:
+            results["failed"].append((url, "Unsupported site"))
+            continue
+        
+        # Create site-specific directory
+        output_dir = f"./downloads/{site_name}"
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+        
+        try:
+            # Download to site folder
+            video_path = DownloadVideo(url, output_dir=output_dir)
+            
+            if site_name not in results["success"]:
+                results["success"][site_name] = []
+            results["success"][site_name].append(video_path)
+            
+            print(f"✓ [{site_name}] {Path(video_path).name}")
+            
+        except Exception as e:
+            results["failed"].append((url, str(e)))
+            print(f"✗ [{site_name}] Error: {e}")
+    
+    # Summary
+    print(f"\n{'='*60}")
+    for site, videos in results["success"].items():
+        print(f"{site}: {len(videos)} videos")
+    print(f"Failed: {len(results['failed'])}")
+    
+    return results
+
+# Usage
+urls = [
+    "https://www.pornhub.com/view_video.php?viewkey=xxxxx",
+    "https://www.eporner.com/video-xxxxx/title",
+    "https://spankbang.com/xxxxx/video/title",
+    "https://www.xvideos.com/video.xxxxx/title"
+]
+
+results = download_and_organize(urls)
+
+# Files are organized:
+# ./downloads/pornhub/video1.mp4
+# ./downloads/eporner/video2.mp4
+# ./downloads/spankbang/video3.mp4
+# ./downloads/xvideos/video4.mp4
+```
+
+### Site-Specific Downloaders (Advanced)
+
+For fine-grained control, use site-specific classes:
+
+```python
+from RedLight import (
+    PornHubDownloader,
+    EpornerDownloader,
+    SpankBangDownloader,
+    XVideosDownloader
+)
+
+# PornHub downloader with custom settings
+ph = PornHubDownloader(
+    output_dir="./pornhub_videos",
+    proxy="http://proxy.example.com:8080"
+)
+ph_video = ph.download(
+    url="https://www.pornhub.com/view_video.php?viewkey=xxxxx",
+    quality="1080"
+)
+
+# Eporner downloader (ultra-fast with aria2c)
+ep = EpornerDownloader(output_dir="./eporner_videos")
+ep_video = ep.download(
+    url="https://www.eporner.com/video-xxxxx/title"
+)
+
+# Spankbang downloader (4K support)
+sb = SpankBangDownloader(output_dir="./spankbang_videos")
+sb_video = sb.download(
+    url="https://spankbang.com/xxxxx/video/title",
+    quality="2160"  # 4K
+)
+
+# XVideos downloader (intelligent fallback)
+xv = XVideosDownloader(output_dir="./xvideos_videos")
+xv_video = xv.download(
+    url="https://www.xvideos.com/video.xxxxx/title",
+    quality="720"
+)
+
+print("All sites downloaded with custom configurations!")
+```
 
 ---
 

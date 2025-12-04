@@ -8,6 +8,13 @@ Welcome to the complete API documentation for RedLight! This documentation will 
 - **[Quick Start Guide](QuickStart.md)** - Get started in 5 minutes
 - **[Installation](QuickStart.md#installation)** - Installing RedLight
 
+### Multi-Site Support
+- **[Multi-Site Guide](MultiSite.md)** 🌐 **NEW!** - Complete guide for all 4 supported sites
+  - PornHub, Eporner, Spankbang, XVideos
+  - Simple and advanced examples
+  - Multi-site search and batch downloads
+  - Site comparison and best practices
+
 ### API Reference
 - **[API Functions](API.md)** - High-level helper functions (`DownloadVideo`, `GetVideoInfo`, etc.)
 - **[Classes](Classes.md)** - Detailed class documentation
@@ -16,8 +23,9 @@ Welcome to the complete API documentation for RedLight! This documentation will 
   - `PlaylistDownloader`
   - `VideoConverter`
   - `MetadataEditor`
-  - `PornHubSearch`
+  - `PornHubSearch`, `MultiSiteSearch`
   - `AsyncVideoDownloader`
+  - Site-specific classes
 
 ### Guides & Examples
 - **[Examples](Examples.md)** - Practical code examples for common use cases
@@ -36,10 +44,11 @@ print(f"Downloaded: {video_path}")
 ## 📋 Table of Contents
 
 1. [Quick Start Guide](QuickStart.md)
-2. [API Functions Reference](API.md)
-3. [Classes Documentation](Classes.md)
-4. [Code Examples](Examples.md)
-5. [Advanced Usage](Advanced.md)
+2. [Multi-Site Guide](MultiSite.md) 🌐
+3. [API Functions Reference](API.md)
+4. [Classes Documentation](Classes.md)
+5. [Code Examples](Examples.md)
+6. [Advanced Usage](Advanced.md)
 
 ## 🆘 Getting Help
 
