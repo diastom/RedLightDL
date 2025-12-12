@@ -52,7 +52,10 @@ class DownloadState:
         return self.status in (DownloadStatus.PAUSED.value, DownloadStatus.FAILED.value)
     
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        data = asdict(self)
+        data['progress_percent'] = self.progress_percent
+        data['is_resumable'] = self.is_resumable
+        return data
 
 
 class ResumeManager:
@@ -164,6 +167,7 @@ class ResumeManager:
         return None
     
     def cancel_download(self, download_id: str) -> bool:
+        # Keep False so update_progress returns False and stops the download
         self._active_downloads[download_id] = False
         
         conn = sqlite3.connect(self.db_path)
@@ -174,7 +178,8 @@ class ResumeManager:
         conn.commit()
         conn.close()
         
-        self._active_downloads.pop(download_id, None)
+        # Don't pop here - let update_progress return False to stop the thread
+        # The key will be cleaned up after the thread exits
         return affected > 0
     
     def complete_download(self, download_id: str, final_path: str = None) -> bool:
@@ -192,6 +197,35 @@ class ResumeManager:
         affected = c.rowcount
         conn.commit()
         conn.close()
+        
+        # Sync with history database
+        if affected > 0:
+            try:
+                state = self.get_download_state(download_id)
+                if state:
+                    from .database import DatabaseManager
+                    db = DatabaseManager()
+                    
+                    # Get actual file path
+                    file_path = final_path or state.output_path
+                    filename = Path(file_path).name if file_path else "unknown"
+                    
+                    # Get actual file size from disk
+                    actual_file_size = 0
+                    if file_path and Path(file_path).exists():
+                        actual_file_size = Path(file_path).stat().st_size
+                    
+                    db.add_entry(
+                        url=state.url,
+                        title=state.title or filename,
+                        filename=filename,
+                        quality=state.quality,
+                        site=state.site,
+                        file_size=actual_file_size
+                    )
+            except Exception as e:
+                print(f"Failed to sync with history DB: {e}")
+        
         self._active_downloads.pop(download_id, None)
         return affected > 0
     

@@ -11,7 +11,28 @@ import requests
 
 
 def IsAria2cAvailable() -> bool:
-    return shutil.which("aria2c") is not None
+    # Check system path
+    if shutil.which("aria2c") is not None:
+        return True
+    
+    # Check local directories (crucial for portable/frozen apps)
+    pkgs_paths = [
+        Path.cwd() / "aria2c.exe",
+        Path.cwd() / "RedLightServer" / "aria2c.exe",
+        Path.cwd() / "_internal" / "aria2c.exe",  # PyInstaller _internal
+        Path(sys.executable).parent / "aria2c.exe" # Next to executable
+    ]
+    
+    for p in pkgs_paths:
+        if p.exists():
+            # Add to PATH so subprocess can find it easily without full path if needed, 
+            # though we should prefer full path in command.
+            # actually better to just return True here and handle path in class
+            return True
+            
+    return False
+
+import sys
 
 
 class Aria2cDownloader:
@@ -38,8 +59,27 @@ class Aria2cDownloader:
         output = Path(output_path)
         output.parent.mkdir(parents=True, exist_ok=True)
         
+    def _get_aria2c_path(self) -> str:
+        # Check system path
+        if shutil.which("aria2c"):
+            return "aria2c"
+            
+        # Check local paths
+        candidates = [
+            Path.cwd() / "aria2c.exe",
+            Path.cwd() / "RedLightServer" / "aria2c.exe",
+            Path.cwd() / "_internal" / "aria2c.exe",
+             Path(sys.executable).parent / "aria2c.exe"
+        ]
+        
+        for p in candidates:
+            if p.exists():
+                return str(p)
+        
+        return "aria2c" # Fallback
+        
         cmd = [
-            "aria2c", url,
+            self._get_aria2c_path(), url,
             "-x", str(self.connections),
             "-s", str(self.connections),
             "-k", "1M",

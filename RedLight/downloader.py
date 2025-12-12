@@ -295,7 +295,13 @@ class CustomHLSDownloader:
                         downloaded_files.append((idx, file_path))
                         completed += 1
                         if self.progress_callback:
-                            self.progress_callback(completed, total_segments)
+                            should_continue = self.progress_callback(completed, total_segments)
+                            if should_continue is False:
+                                raise RuntimeError("Download cancelled")
+                    except RuntimeError as e:
+                        if str(e) == "Download cancelled":
+                            executor.shutdown(wait=False, cancel_futures=True)
+                            raise e
                     except Exception as e:
                         pass 
 

@@ -17,7 +17,7 @@ BANNER = """
 [bold cyan]║[/]  [bold magenta]╚═╝  ╚═╝╚══════╝╚═════╝ ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   [/]   [bold cyan]║[/]
 [bold cyan]║[/]          [bold yellow]Professional Adult Content Downloader                [/]   [bold cyan]║[/]
 [bold cyan]╚══════════════════════════════════════════════════════════════════╝[/]
-                [dim]version 2.1.0 • RedLight DL[/]
+                [dim]version 2.1.1 • RedLight DL[/]
 """
 
 
